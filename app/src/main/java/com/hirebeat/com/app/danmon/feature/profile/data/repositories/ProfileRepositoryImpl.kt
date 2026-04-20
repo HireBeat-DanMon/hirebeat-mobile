@@ -1,0 +1,29 @@
+package com.hirebeat.com.app.danmon.feature.profile.data.repositories
+
+import com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.api.ProfileApi
+import com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.mapper.*
+import com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.model.ProfileSetupRequestDto
+import com.hirebeat.com.app.danmon.feature.profile.domain.entities.*
+import com.hirebeat.com.app.danmon.feature.profile.domain.repositories.ProfileRepository
+import javax.inject.Inject
+
+class ProfileRepositoryImpl @Inject constructor(
+    private val api: ProfileApi
+) : ProfileRepository {
+
+    override suspend fun getMyProfile(): UserProfile {
+        return api.getMyProfile().toDomain()
+    }
+
+    override suspend fun updateProfile(request: ProfileSetupRequestDto): UserProfile {
+        return api.updateProfile(request).toDomain()
+    }
+
+    override suspend fun getInstruments(): List<CatalogItem> {
+        return api.getInstruments().map { it.toDomain() }
+    }
+
+    override suspend fun getGenres(): List<CatalogItem> {
+        return api.getGenres().map { it.toDomain() }
+    }
+}

@@ -1,0 +1,28 @@
+package com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.model
+
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ProfileSetupRequestDto(
+    @SerializedName("city") val city: String,
+    @SerializedName("experience") val experience: Int,
+    @SerializedName("descripcion") val descripcion: String,
+    @SerializedName("genres") val genres: List<Int>,
+    @SerializedName("instruments") val instruments: List<InstrumentSelectionRequestDto>,
+    @SerializedName("links") val links: List<PlataformasProfileRequestDto>
+)
+
+@Serializable
+data class InstrumentSelectionRequestDto(
+    @SerializedName("instrumentId") val instrumentId: Int,
+    @SerializedName("level") val level: String,
+    @SerializedName("isPrincipal") val isPrincipal: Boolean
+)
+
+@Serializable
+data class PlataformasProfileRequestDto(
+    @SerializedName("name") val name: String,
+    @SerializedName("type") val type: Int,
+    @SerializedName("ref") val ref: String
+)
