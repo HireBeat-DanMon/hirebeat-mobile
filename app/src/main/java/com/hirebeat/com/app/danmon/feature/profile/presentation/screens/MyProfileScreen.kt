@@ -36,7 +36,6 @@ fun MyProfileScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
 
-    // 1. Manejo de carga
     if (state.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
@@ -86,7 +85,6 @@ fun MyProfileScreen(
                 .background(MaterialTheme.colorScheme.background)
                 .verticalScroll(scrollState)
         ) {
-            // Imagen de Portada / Header
             Box(modifier = Modifier.fillMaxWidth().height(260.dp)) {
                 Image(
                     painter = painterResource(id = android.R.drawable.ic_menu_gallery), // Cambiar por URL real si existe
@@ -103,7 +101,6 @@ fun MyProfileScreen(
                 )
             }
 
-            // Contenido del Perfil
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -113,7 +110,6 @@ fun MyProfileScreen(
             ) {
                 Column(modifier = Modifier.padding(Spacing.Large)) {
 
-                    // --- Información Básica ---
                     Text(
                         text = profile?.fullName ?: "Daniel Camacho Morales",
                         style = MaterialTheme.typography.headlineLarge,
@@ -125,23 +121,30 @@ fun MyProfileScreen(
                         Text(text = profile?.city ?: "Tuxtla Gutiérrez", style = MaterialTheme.typography.bodyLarge)
                     }
 
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.History, null, tint = Color(0xFFC97E58), modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "${profile?.experience ?: 0} años de experiencia",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(Spacing.Medium))
                     HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
                     Spacer(modifier = Modifier.height(Spacing.Medium))
 
-                    // --- Instrumentos (Dinámico del JSON) ---
                     SectionTitleView(title = "Mis Instrumentos", iconColor = Color(0xFF8D4E2C))
                     profile?.instruments?.forEach { instrument ->
                         InstrumentItem(
                             profileInstrument = instrument,
-                            onLevelChange = { /* Solo lectura, no hacemos nada */ },
-                            onTogglePrincipal = { /* Solo lectura, no hacemos nada */ }
+                            onLevelChange = { },
+                            onTogglePrincipal = { }
                         )
                     } ?: Text("No hay instrumentos registrados", style = MaterialTheme.typography.bodySmall)
 
                     Spacer(modifier = Modifier.height(Spacing.Medium))
 
-                    // --- Sobre mí (Descripción) ---
                     SectionTitleView(title = "Sobre mí", iconColor = Color(0xFFC97E58))
                     Text(
                         text = profile?.description ?: "Músico independiente que toca marimba...",
@@ -151,7 +154,6 @@ fun MyProfileScreen(
 
                     Spacer(modifier = Modifier.height(Spacing.Medium))
 
-                    // --- Géneros (Dinámico del JSON) ---
                     SectionTitleView(title = "Géneros", iconColor = Color(0xFF8D4E2C))
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
@@ -165,7 +167,6 @@ fun MyProfileScreen(
 
                     Spacer(modifier = Modifier.height(Spacing.Medium))
 
-                    // --- Contacto y Enlaces ---
                     SectionTitleView(title = "Enlaces y Contacto", iconColor = Color(0xFF5C4033))
                     profile?.links?.forEach { link ->
                         val icon = when(link.name.lowercase()) {

@@ -15,26 +15,34 @@ import javax.inject.Singleton
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "hirebeat_prefs")
 
 @Singleton
-class SessionManager @Inject constructor(@ApplicationContext context: Context) {
+class SessionManager @Inject constructor(
+    @ApplicationContext context: Context
+) {
     private val dataStore = context.dataStore
 
     companion object {
         private val AUTH_TOKEN = stringPreferencesKey("auth_token")
+        private val ROLE_ID = stringPreferencesKey("role_id")
+        private const val MUSICIAN_ROLE_ID = "22222222-2222-2222-2222-222222222222"
     }
 
-    val authToken: Flow<String?> = dataStore.data.map { preferences ->
-        preferences[AUTH_TOKEN]
+    val authToken: Flow<String?> = dataStore.data.map { it[AUTH_TOKEN] }
+
+    val isMusician: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[ROLE_ID] == MUSICIAN_ROLE_ID
     }
 
-    suspend fun saveToken(token: String) {
+    suspend fun saveSession(token: String, roleId: String) {
         dataStore.edit { preferences ->
             preferences[AUTH_TOKEN] = token
+            preferences[ROLE_ID] = roleId
         }
     }
 
-    suspend fun clearToken() {
+    suspend fun clearSession() {
         dataStore.edit { preferences ->
             preferences.remove(AUTH_TOKEN)
+            preferences.remove(ROLE_ID)
         }
     }
 }

@@ -16,7 +16,7 @@ data class ProfileSetupRequestDto(
 @Serializable
 data class InstrumentSelectionRequestDto(
     @SerializedName("instrumentId") val instrumentId: Int,
-    @SerializedName("level") val level: String,
+    @SerializedName("level") val level: Int,
     @SerializedName("isPrincipal") val isPrincipal: Boolean
 )
 

@@ -15,6 +15,7 @@ data class ProfileUiState(
 
     val city: String = "",
     val phone: String = "",
+    val experience: String = "0",
     val whatsapp: String = "",
     val description: String = "",
     val selectedInstruments: List<ProfileInstrument> = emptyList(),

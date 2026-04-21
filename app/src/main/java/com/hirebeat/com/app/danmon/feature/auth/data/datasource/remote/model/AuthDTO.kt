@@ -20,5 +20,6 @@ data class RegisterRequestDto(
 
 @Serializable
 data class AuthResponseDto(
-    val token: String = ""
+    @SerializedName("token") val token: String = "",
+    @SerializedName("roleId") val roleId: String? = null
 )

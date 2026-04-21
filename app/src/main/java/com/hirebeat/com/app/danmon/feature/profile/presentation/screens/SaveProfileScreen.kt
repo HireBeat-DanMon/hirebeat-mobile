@@ -74,6 +74,11 @@ fun SaveProfileScreen(
                     label = "Ubicación"
                 )
                 HireBeatTextField(
+                    value = state.experience,
+                    onValueChange = { viewModel.onExperienceChange(it) },
+                    label = "Años de experiencia"
+                )
+                HireBeatTextField(
                     value = state.phone,
                     onValueChange = { viewModel.onPhoneChange(it) },
                     label = "Teléfono"
