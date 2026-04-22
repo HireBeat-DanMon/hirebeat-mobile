@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.hirebeat.com.app.danmon.core.theme.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.components.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.ProfileViewModel
@@ -75,13 +76,15 @@ fun ProfileScreen(
                     .verticalScroll(scrollState)
             ) {
 
-                Image(
-                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
-                    contentDescription = "Foto de perfil",
+                AsyncImage(
+                    model = profile?.photoUrl,
+                    contentDescription = "Foto de perfil de ${profile?.fullName}",
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(id = android.R.drawable.ic_menu_gallery),
+                    error = painterResource(id = android.R.drawable.ic_menu_report_image)
                 )
 
                 Surface(

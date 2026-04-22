@@ -21,6 +21,7 @@ fun HireBeatTextField(
     label: String,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
+    trailingIcon: @Composable (() -> Unit)? = null,
     imeAction: ImeAction = ImeAction.Next,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -29,6 +30,7 @@ fun HireBeatTextField(
         onValueChange = onValueChange,
         label = { Text(label) },
         modifier = modifier.fillMaxWidth(),
+        trailingIcon = trailingIcon,
         shape = RoundedCornerShape(Sizing.CardCorner),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(

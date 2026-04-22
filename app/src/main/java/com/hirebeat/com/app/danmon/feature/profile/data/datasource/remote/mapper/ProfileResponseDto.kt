@@ -7,6 +7,7 @@ fun ProfileResponseDto.toDomain(): UserProfile {
     return UserProfile(
         id = this.id ?: "",
         fullName = this.fullname ?: "Usuario",
+        photoUrl = this.imageUrl ?: "",
         email = this.email ?: "",
         city = this.city ?: "Sin ubicación",
         experience = this.experience ?: 0,

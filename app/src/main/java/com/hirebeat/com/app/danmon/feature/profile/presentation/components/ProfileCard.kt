@@ -51,7 +51,7 @@ fun ProfileCard(
                 // Imagen con indicador de estado (punto verde)
                 Box(contentAlignment = Alignment.BottomEnd) {
                     AsyncImage(
-                        model = "", // Aquí iría profile.photoUrl si existiera en el dominio
+                        model = profile.photoUrl, // Aquí iría profile.photoUrl si existiera en el dominio
                         contentDescription = null,
                         modifier = Modifier
                             .size(80.dp)

@@ -2,6 +2,8 @@ package com.hirebeat.com.app.danmon.feature.auth.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hirebeat.com.app.danmon.core.hardware.domain.FlashManager
+import com.hirebeat.com.app.danmon.core.hardware.domain.VibrateManager
 import com.hirebeat.com.app.danmon.core.navigation.*
 import com.hirebeat.com.app.danmon.feature.auth.data.datasource.remote.model.LoginRequestDto
 import com.hirebeat.com.app.danmon.feature.auth.data.datasource.remote.model.RegisterRequestDto
@@ -18,7 +20,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val registerUseCase: RegisterUseCase
+    private val registerUseCase: RegisterUseCase,
+    private val vibrateManager: VibrateManager,
+    private val flashManager: FlashManager,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())
@@ -69,10 +73,12 @@ class AuthViewModel @Inject constructor(
                         password = "",
                         error = "Registro exitoso. Ya puedes iniciar sesión."
                     ) }
+                    vibrateManager.run()
                 }
 
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = e.localizedMessage ?: "Error de conexión") }
+                flashManager.blink(200)
             }
         }
     }

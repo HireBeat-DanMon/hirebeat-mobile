@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DeleteOutline
+import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,13 +56,27 @@ fun SaveProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Spacing.Large)
         ) {
-            ProfileImageSection()
+            ProfileImageSection(
+                imageUrl = state.userProfile?.photoUrl, // Usar la URL que viene del estado
+                onImageSelected = { bytes, name ->
+                    viewModel.onImageSelected(bytes, name)
+                }
+            )
 
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.Small)) {
                 HireBeatTextField(
                     value = state.city,
                     onValueChange = { viewModel.onCityChange(it) },
-                    label = "Ubicación"
+                    label = "Ubicación",
+                    trailingIcon = {
+                        IconButton(onClick = { viewModel.useCurrentLocation() }) {
+                            Icon(
+                                imageVector = Icons.Default.MyLocation,
+                                contentDescription = "Obtener ubicación",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
                 )
                 HireBeatTextField(
                     value = state.experience,
@@ -156,6 +172,16 @@ fun SaveProfileScreen(
                     onDone = { focusManager.clearFocus() }
                 )
             )
+            state.error?.let { errorMsg ->
+                Text(
+                    text = errorMsg,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
             HireBeatButton(
                 text = if (state.isSaving) "GUARDANDO..." else "GUARDAR PERFIL",
                 onClick = { viewModel.saveProfile() },
