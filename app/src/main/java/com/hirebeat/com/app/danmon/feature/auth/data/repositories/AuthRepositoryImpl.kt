@@ -16,14 +16,14 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun login(request: LoginRequestDto): AuthToken {
         val response = api.login(request)
         val domainToken = response.toDomain()
-        sessionManager.saveSession(domainToken.token, response.roleId ?: "")
+        sessionManager.saveSession(domainToken.token)
         return domainToken
     }
 
     override suspend fun register(request: RegisterRequestDto): AuthToken {
         val response = api.register(request)
         val domainToken = response.toDomain()
-        sessionManager.saveSession(domainToken.token, request.roleId)
+        sessionManager.saveSession(domainToken.token)
         return domainToken
     }
 }

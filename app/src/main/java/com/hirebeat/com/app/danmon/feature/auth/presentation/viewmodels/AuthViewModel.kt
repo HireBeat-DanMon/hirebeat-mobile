@@ -46,7 +46,6 @@ class AuthViewModel @Inject constructor(
                 if (currentState.isLoginMode) {
                     val request = LoginRequestDto(currentState.email, currentState.password)
                     loginUseCase.execute(request)
-                    // SOLO cuando es Login disparamos el éxito para cambiar de pantalla
                     _uiState.update { it.copy(isLoading = false, isSuccess = true) }
 
                 } else {
@@ -64,12 +63,11 @@ class AuthViewModel @Inject constructor(
                     )
                     registerUseCase.execute(request)
 
-                    // Si el registro es exitoso, lo regresamos a modo Login y limpiamos su contraseña
                     _uiState.update { it.copy(
                         isLoading = false,
                         isLoginMode = true,
                         password = "",
-                        error = "Registro exitoso. Ya puedes iniciar sesión." // Mensaje de aviso
+                        error = "Registro exitoso. Ya puedes iniciar sesión."
                     ) }
                 }
 

@@ -17,6 +17,7 @@ class ProfileViewModel @Inject constructor(
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val getCatalogsUseCase: GetCatalogsUseCase,
     private val updateProfileUseCase: UpdateProfileUseCase,
+    private val getAllProfilesUseCases: GetAllProfilesUseCases,
     private val sessionManager: SessionManager
 ) : ViewModel() {
 
@@ -24,11 +25,6 @@ class ProfileViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            sessionManager.isMusician.collect { isMusician ->
-                _uiState.update { it.copy(isRecruiter = !isMusician) }
-            }
-        }
         loadMyProfile()
         loadCatalogs()
     }
@@ -45,6 +41,23 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun loadProfile(userId: String?) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                val profile = if (userId == null || userId == "my_id") {
+                    getMyProfileUseCase.execute()
+                } else {
+                    getAllProfilesUseCases.execute().find { it.id == userId }
+                }
+
+                _uiState.update { it.copy(userProfile = profile, isLoading = false) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(isLoading = false, error = e.localizedMessage) }
+            }
+        }
+    }
+
     private fun updateFieldsWithProfile(profile: UserProfile) {
         _uiState.update { it.copy(
             userProfile = profile,
@@ -54,7 +67,6 @@ class ProfileViewModel @Inject constructor(
             experience = profile.experience.toString(),
             selectedInstruments = profile.instruments,
             selectedGenres = profile.genres.map { it.id },
-            // Mapeo flexible para encontrar los links sin importar mayúsculas/minúsculas
             instagramUser = profile.links.find { it.name.contains("Insta", true) }?.ref ?: "",
             phone = profile.links.find { it.name.contains("Tele", true) }?.ref ?: "",
             whatsapp = profile.links.find { it.name.contains("Wha", true) }?.ref ?: ""
@@ -90,10 +102,7 @@ class ProfileViewModel @Inject constructor(
                     )
                 )
 
-                // 1. Enviar al servidor
                 val updatedProfile = updateProfileUseCase.execute(request)
-
-                // 2. Sincronizar UI con la respuesta real del servidor inmediatamente
                 updateFieldsWithProfile(updatedProfile)
 
                 _uiState.update { it.copy(isSaving = false, isSuccess = true) }

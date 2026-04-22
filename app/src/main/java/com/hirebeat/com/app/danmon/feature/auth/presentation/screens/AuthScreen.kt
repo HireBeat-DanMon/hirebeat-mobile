@@ -135,8 +135,8 @@ fun AuthScreen(
 
                 HireBeatButton(
                     text = if (state.isLoading) "Cargando..." else if (state.isLoginMode) "Entrar" else "Registrarse",
-                    onClick = { viewModel.submit() }, // <-- CAMBIO CLAVE AQUI
-                    enabled = !state.isLoading // Deshabilita el botón si está cargando
+                    onClick = { viewModel.submit() },
+                    enabled = !state.isLoading
                 )
 
             }

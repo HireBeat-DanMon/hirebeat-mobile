@@ -15,6 +15,9 @@ class ProfileRepositoryImpl @Inject constructor(
         return api.getMyProfile().toDomain()
     }
 
+    override suspend fun getAllProfiles(): List<UserProfile> {
+        return api.getAllProfiles().map { it.toDomain() }
+    }
     override suspend fun updateProfile(request: ProfileSetupRequestDto): UserProfile {
         return api.updateProfile(request).toDomain()
     }

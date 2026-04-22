@@ -9,8 +9,10 @@ import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
+import android.util.Base64
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "hirebeat_prefs")
 
@@ -22,27 +24,32 @@ class SessionManager @Inject constructor(
 
     companion object {
         private val AUTH_TOKEN = stringPreferencesKey("auth_token")
-        private val ROLE_ID = stringPreferencesKey("role_id")
-        private const val MUSICIAN_ROLE_ID = "22222222-2222-2222-2222-222222222222"
     }
 
     val authToken: Flow<String?> = dataStore.data.map { it[AUTH_TOKEN] }
 
-    val isMusician: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[ROLE_ID] == MUSICIAN_ROLE_ID
+    val userRoleName: Flow<String?> = authToken.map { token ->
+        if (token.isNullOrEmpty()) return@map null
+        try {
+            val parts = token.split(".")
+            if (parts.size < 2) return@map null
+            val payload = String(Base64.decode(parts[1], Base64.DEFAULT))
+            val json = JSONObject(payload)
+            json.optString("role", "GUEST")
+        } catch (e: Exception) {
+            "GUEST"
+        }
     }
 
-    suspend fun saveSession(token: String, roleId: String) {
+    suspend fun saveSession(token: String) {
         dataStore.edit { preferences ->
             preferences[AUTH_TOKEN] = token
-            preferences[ROLE_ID] = roleId
         }
     }
 
     suspend fun clearSession() {
         dataStore.edit { preferences ->
             preferences.remove(AUTH_TOKEN)
-            preferences.remove(ROLE_ID)
         }
     }
 }

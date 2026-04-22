@@ -11,7 +11,6 @@ data class LocationPoint(
         require(timestamp > 0) { "Timestamp inválido" }
     }
 
-    // Validación de frescura (ej: máximo 60 segundos de antigüedad)
     fun isFresh(maxAgeMillis: Long = 60000): Boolean {
         return (System.currentTimeMillis() - timestamp) < maxAgeMillis
     }

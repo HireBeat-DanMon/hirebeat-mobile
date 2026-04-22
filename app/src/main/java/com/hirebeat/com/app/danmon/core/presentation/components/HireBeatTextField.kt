@@ -21,7 +21,7 @@ fun HireBeatTextField(
     label: String,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
-    imeAction: ImeAction = ImeAction.Next, // Por defecto "Siguiente"
+    imeAction: ImeAction = ImeAction.Next,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     OutlinedTextField(
@@ -35,7 +35,7 @@ fun HireBeatTextField(
             keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text,
             imeAction = imeAction
         ),
-        keyboardActions = keyboardActions, // Define qué pasa al pulsar ese icono
+        keyboardActions = keyboardActions,
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = Color.White,
             unfocusedContainerColor = Color.White,

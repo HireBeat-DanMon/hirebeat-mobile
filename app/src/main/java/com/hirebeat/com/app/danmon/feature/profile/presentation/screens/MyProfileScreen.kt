@@ -67,16 +67,6 @@ fun MyProfileScreen(
                     Icon(Icons.Default.Logout, "Salir", tint = Color.White)
                 }
             }
-        },
-        bottomBar = {
-            Surface(
-                modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
-                shadowElevation = 8.dp
-            ) {
-                Box(modifier = Modifier.padding(Spacing.Medium)) {
-                    HireBeatButton(text = "EDITAR MI PERFIL", onClick = onEditProfile)
-                }
-            }
         }
     ) { padding ->
         Column(
@@ -87,7 +77,7 @@ fun MyProfileScreen(
         ) {
             Box(modifier = Modifier.fillMaxWidth().height(260.dp)) {
                 Image(
-                    painter = painterResource(id = android.R.drawable.ic_menu_gallery), // Cambiar por URL real si existe
+                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -185,7 +175,13 @@ fun MyProfileScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(120.dp))
+                    HireBeatButton(
+                        text = "Editar mi información",
+                        onClick = onEditProfile,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = Spacing.Medium, vertical = Spacing.Medium)
+                    )
                 }
             }
         }

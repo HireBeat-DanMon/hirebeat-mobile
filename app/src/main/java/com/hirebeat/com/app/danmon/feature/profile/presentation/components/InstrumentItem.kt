@@ -35,7 +35,6 @@ fun InstrumentItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            // El truco es poner el detectTapGestures ANTES que cualquier otra cosa
             .pointerInput(profileInstrument.instrument.id) {
                 detectTapGestures(
                     onDoubleTap = { onTogglePrincipal() }
@@ -66,7 +65,7 @@ fun InstrumentItem(
                 )
                 if (profileInstrument.isPrincipal) {
                     Icon(
-                        imageVector = Icons.Default.Stars, // Usamos Stars para que sea diferente a las de nivel
+                        imageVector = Icons.Default.Stars,
                         contentDescription = "Principal",
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(20.dp)

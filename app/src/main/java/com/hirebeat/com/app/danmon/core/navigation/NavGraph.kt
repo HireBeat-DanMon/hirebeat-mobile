@@ -1,10 +1,13 @@
 package com.hirebeat.com.app.danmon.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
+import androidx.navigation.toRoute
 import com.hirebeat.com.app.danmon.feature.auth.presentation.screens.AuthScreen
+import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.FeedScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.MyProfileScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.SaveProfileScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.ProfileScreen
@@ -16,12 +19,13 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
     ) {
+
         composable<AuthRoute> {
             AuthScreen(
-                onLoginSuccess = { destination ->
-                    navController.navigate(destination) {
+                onLoginSuccess = {
+                    navController.navigate(FeedRoute) {
                         popUpTo<AuthRoute> { inclusive = true }
                     }
                 }
@@ -31,7 +35,7 @@ fun NavGraph(
         composable<SaveProfileRoute> {
             SaveProfileScreen(
                 onProfileSaved = {
-                    navController.navigate(HomeRoute) {
+                    navController.navigate(FeedRoute) {
                         popUpTo<SaveProfileRoute> { inclusive = true }
                     }
                 },
@@ -39,14 +43,18 @@ fun NavGraph(
             )
         }
 
-        composable<HomeRoute> {
-            PlaceholderScreen(
-                onNavigate = { route -> navController.navigate(route) }
+        composable<FeedRoute> {
+            FeedScreen(
+                onProfileClick = { id ->
+                    navController.navigate(ProfileDetailRoute(userId = id))
+                }
             )
         }
 
-        composable<ProfileDetailRoute> {
+        composable<ProfileDetailRoute> { backStackEntry ->
+            val route: ProfileDetailRoute = backStackEntry.toRoute()
             ProfileScreen(
+                userId = route.userId,
                 onBack = { navController.popBackStack() }
             )
         }
@@ -57,7 +65,10 @@ fun NavGraph(
                 onEditProfile = { navController.navigate(SaveProfileRoute) },
                 onLogout = {
                     navController.navigate(AuthRoute) {
-                        popUpTo<HomeRoute> { inclusive = true }
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
                     }
                 }
             )

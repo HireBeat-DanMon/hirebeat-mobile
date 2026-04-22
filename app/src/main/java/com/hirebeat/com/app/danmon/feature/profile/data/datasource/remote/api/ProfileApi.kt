@@ -10,6 +10,9 @@ interface ProfileApi {
     @PUT("/profile")
     suspend fun updateProfile(@Body request: ProfileSetupRequestDto): ProfileResponseDto
 
+    @GET("/profile")
+    suspend fun getAllProfiles(): List<ProfileResponseDto>
+
     @GET("/instruments")
     suspend fun getInstruments(): List<SimpleCatalogResponseDto>
 

@@ -2,6 +2,7 @@ package com.hirebeat.com.app.danmon.feature.profile.domain.entities
 
 data class UserProfile(
     val id: String,
+    val photoUrl : String = "",
     val fullName: String,
     val email: String,
     val city: String,
@@ -17,8 +18,6 @@ data class ProfileLink(
     val name: String,
     val ref: String
 )
-
-// danmon/feature/profile/domain/entities/SkillLevel.kt (Sugerencia de ubicación)
 enum class SkillLevel(val value: Int, val displayName: String) {
     BASICO(1, "BASICO"),
     PRINCIPIANTE(2, "PRINCIPIANTE"),
