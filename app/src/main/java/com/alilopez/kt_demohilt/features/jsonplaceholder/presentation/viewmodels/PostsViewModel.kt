@@ -1,0 +1,61 @@
+package com.alilopez.demo.features.jsonplaceholder.presentation.viewmodels
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.alilopez.demo.features.jsonplaceholder.domain.entities.Posts
+import com.alilopez.demo.features.jsonplaceholder.domain.usescases.GetPostsUseCase
+import com.alilopez.demo.features.jsonplaceholder.presentation.screens.PostsUIState
+import com.alilopez.kt_demohilt.core.hardware.domain.FlashManager
+import com.alilopez.kt_demohilt.core.hardware.domain.VibrationManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+@HiltViewModel
+class PostsViewModel @Inject constructor(
+    private val getPostsUseCase: GetPostsUseCase,
+    private val flashManager: FlashManager,
+    private val vibrationManager: VibrationManager
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(PostsUIState())
+    val uiState = _uiState.asStateFlow()
+
+    init {
+        loadPosts()
+    }
+
+    private fun loadPosts(){
+        _uiState.update { it.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            val result = getPostsUseCase()
+
+            result.fold(
+                onSuccess = { list ->
+                    _uiState.update { it.copy(isLoading = false, posts = list) }
+
+                    if (flashManager.hasFlash()) {
+                        flashManager.blink(100)
+                        vibrationManager.vibrate(100)
+                    }
+                },
+                onFailure = { error ->
+                    _uiState.update { it.copy(isLoading = false, error = error.message) }
+                }
+            )
+        }
+    }
+
+    // Encendido manual
+    fun onFlashManual(enable: Boolean) {
+        if (enable) flashManager.turnOn() else flashManager.turnOff()
+    }
+
+    fun onPostClicked(postId: Int) {
+        // Ejecutar la vibración al dar clic
+        vibrationManager.vibrate(100)
+    }
+}
