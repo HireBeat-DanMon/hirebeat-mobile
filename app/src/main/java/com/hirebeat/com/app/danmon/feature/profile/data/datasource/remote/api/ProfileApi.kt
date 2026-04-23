@@ -8,6 +8,9 @@ interface ProfileApi {
     @GET("/profile/me")
     suspend fun getMyProfile(): ProfileResponseDto
 
+    @GET("profile/{id}")
+    suspend fun getProfileById(@Path("id") id: String): ProfileResponseDto
+
     @Multipart
     @POST("/profile/image")
     suspend fun uploadProfileImage(

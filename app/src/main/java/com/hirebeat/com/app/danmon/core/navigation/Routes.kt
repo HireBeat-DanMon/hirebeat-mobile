@@ -18,4 +18,7 @@ object MyProfileRoute
 object FeedRoute
 
 @Serializable
+object MyReviewsRoute
+
+@Serializable
 data class ProfileDetailRoute(val userId: String)

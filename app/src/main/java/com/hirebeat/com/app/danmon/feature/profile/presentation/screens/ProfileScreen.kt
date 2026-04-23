@@ -1,5 +1,6 @@
 package com.hirebeat.com.app.danmon.feature.profile.presentation.screens
 
+import com.hirebeat.com.app.danmon.feature.review.presentation.screens.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import com.hirebeat.com.app.danmon.feature.review.presentation.components.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -22,26 +24,36 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.hirebeat.com.app.danmon.core.theme.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.components.*
-import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.ProfileViewModel
+import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.ProfileDetailViewModel
+import com.hirebeat.com.app.danmon.feature.review.presentation.viewmodels.ReviewViewModel
 
 @Composable
 fun ProfileScreen(
     userId: String,
-    viewModel: ProfileViewModel = hiltViewModel(),
+    viewModel: ProfileDetailViewModel = hiltViewModel(),
+    reviewViewModel: ReviewViewModel = hiltViewModel(),
     onBack: () -> Unit = {}
 ) {
-
-
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val reviewState by reviewViewModel.uiState.collectAsStateWithLifecycle()
     val profile = state.userProfile
+
+    LaunchedEffect(userId) {
+        viewModel.loadProfile(userId)
+        reviewViewModel.loadReviews(userId)
+    }
 
     if (state.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            CircularProgressIndicator()
         }
-        LaunchedEffect(userId) {
-            viewModel.loadProfile(userId)
+        return
+    }
+
+    if (profile == null && state.error != null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = state.error ?: "Error al cargar el perfil", color = Color.Red)
         }
         return
     }
@@ -136,7 +148,26 @@ fun ProfileScreen(
                             iconColor = Color(0xFF5C4033)
                         )
 
-                        ReviewCardMock()
+                        ReviewsSection(
+                            reviews = reviewState.reviews,
+                            hasAlreadyReviewed = reviewState.hasAlreadyReviewed,
+                            showAddModal = reviewState.showAddModal,
+                            isSubmitting = reviewState.isSubmitting,
+                            onToggleModal = { reviewViewModel.toggleModal(it) },
+                            onSubmitReview = { rating, comment ->
+                                reviewViewModel.submitReview(rating, comment)
+                            }
+                        )
+
+                        if (reviewState.showAddModal) {
+                            AddReviewModal(
+                                onDismiss = { reviewViewModel.toggleModal(false) },
+                                onSubmit = { rating, comment ->
+                                    reviewViewModel.submitReview(rating, comment)
+                                },
+                                isSubmitting = reviewState.isSubmitting
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(innerPadding.calculateBottomPadding() + Spacing.Small))
                     }

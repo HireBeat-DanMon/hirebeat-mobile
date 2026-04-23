@@ -11,6 +11,7 @@ import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.FeedScre
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.MyProfileScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.SaveProfileScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.ProfileScreen
+import com.hirebeat.com.app.danmon.feature.review.presentation.screens.MyReviewsScreen
 
 @Composable
 fun NavGraph(
@@ -73,5 +74,12 @@ fun NavGraph(
                 }
             )
         }
+
+        composable<MyReviewsRoute> {
+            MyReviewsScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
     }
 }

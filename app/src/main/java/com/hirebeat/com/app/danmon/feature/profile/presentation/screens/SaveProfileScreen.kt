@@ -25,12 +25,12 @@ import com.hirebeat.com.app.danmon.core.presentation.components.*
 import com.hirebeat.com.app.danmon.core.theme.*
 import com.hirebeat.com.app.danmon.feature.profile.domain.entities.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.components.*
-import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.ProfileViewModel
+import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.MyProfileViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SaveProfileScreen(
-    viewModel: ProfileViewModel = hiltViewModel(),
+    viewModel: MyProfileViewModel = hiltViewModel(),
     onProfileSaved: () -> Unit = {},
     onBack: () -> Unit = {}
 ) {

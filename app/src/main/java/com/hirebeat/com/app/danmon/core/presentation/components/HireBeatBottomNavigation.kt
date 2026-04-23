@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import com.hirebeat.com.app.danmon.core.navigation.*
@@ -48,6 +49,12 @@ fun HireBeatBottomBar(
                 onClick = { onNavigate(MyProfileRoute) },
                 label = { Text("Mi Perfil") },
                 icon = { Icon(Icons.Default.Person, contentDescription = null) }
+            )
+            NavigationBarItem(
+                selected = currentRoute is MyReviewsRoute,
+                onClick = { onNavigate(MyReviewsRoute) },
+                label = { Text("Mis Reseñas") },
+                icon = { Icon(Icons.Default.Star, contentDescription = "Mis Reseñas") }
             )
         } else {
             NavigationBarItem(

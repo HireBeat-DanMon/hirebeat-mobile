@@ -7,6 +7,8 @@ interface ProfileRepository {
     suspend fun getMyProfile(): UserProfile
     suspend fun updateProfile(request: ProfileSetupRequestDto): UserProfile
 
+    suspend fun getProfileById(id: String): UserProfile
+
     suspend fun uploadImage(fileBytes: ByteArray, fileName: String): String
     suspend fun getAllProfiles(): List<UserProfile>
     suspend fun getInstruments(): List<CatalogItem>
