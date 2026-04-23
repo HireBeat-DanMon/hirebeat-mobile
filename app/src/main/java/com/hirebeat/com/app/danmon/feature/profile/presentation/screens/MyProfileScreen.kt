@@ -23,12 +23,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hirebeat.com.app.danmon.core.presentation.components.HireBeatButton
 import com.hirebeat.com.app.danmon.core.theme.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.components.*
-import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.MyProfileViewModel
+import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.ProfileViewModel
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MyProfileScreen(
-    viewModel: MyProfileViewModel = hiltViewModel(),
+    viewModel: ProfileViewModel = hiltViewModel(),
     onBack: () -> Unit = {},
     onEditProfile: () -> Unit = {},
     onLogout: () -> Unit = {}

@@ -130,6 +130,23 @@ fun ProfileScreen(
                             color = Color.Black.copy(alpha = 0.8f)
                         )
 
+                        if (profile?.instruments?.isNotEmpty() == true) {
+                            SectionTitleView(title = "Instrumentos", iconColor = Color(0xFF4A6572)) // Puedes cambiar el color
+                            FlowRow(
+                                horizontalArrangement = Arrangement.spacedBy(Spacing.Small),
+                                verticalArrangement = Arrangement.spacedBy(Spacing.Small),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                profile.instruments.forEach { instrument ->
+                                    GenreChip(
+                                        name = instrument.instrument.name,
+                                        isSelected = true,
+                                        onClick = {}
+                                    )
+                                }
+                            }
+                        }
+
                         if (profile?.genres?.isNotEmpty() == true) {
                             SectionTitleView(title = "Especialidad", iconColor = Color(0xFFC97E58))
                             FlowRow(
