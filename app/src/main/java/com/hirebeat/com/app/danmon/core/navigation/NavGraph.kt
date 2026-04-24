@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.toRoute
 import com.hirebeat.com.app.danmon.feature.auth.presentation.screens.AuthScreen
+import com.hirebeat.com.app.danmon.feature.gig_requests.presentation.screens.GigRequestsScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.FeedScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.MyProfileScreen
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.SaveProfileScreen
@@ -50,6 +51,10 @@ fun NavGraph(
                     navController.navigate(ProfileDetailRoute(userId = id))
                 }
             )
+        }
+
+        composable<GigRequestsRoute> {
+            GigRequestsScreen()
         }
 
         composable<ProfileDetailRoute> { backStackEntry ->

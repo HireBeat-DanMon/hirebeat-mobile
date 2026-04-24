@@ -22,7 +22,7 @@ class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
     private val vibrateManager: VibrateManager,
-    private val flashManager: FlashManager,
+    private val flashManager: FlashManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AuthUiState())

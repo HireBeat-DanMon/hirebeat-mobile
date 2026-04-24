@@ -28,7 +28,7 @@ class ProfileViewModel @Inject constructor(
     private val flashManager: FlashManager,
     private val locationRepository: LocationRepository,
     private val permissionChecker: PermissionChecker,
-    @ApplicationContext private val context: Context,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())

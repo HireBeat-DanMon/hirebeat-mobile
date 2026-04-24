@@ -1,100 +1,91 @@
 package com.hirebeat.com.app.danmon.core.presentation.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.hirebeat.com.app.danmon.core.navigation.*
 
 @Composable
-fun HireBeatBottomBar(
-    currentRoute: Any?,
+fun HireBeatBottomNavigation(
+    navController: NavHostController,
     roleName: String?,
-    onNavigate: (Any) -> Unit,
     onLogout: () -> Unit
 ) {
+    val navBackStackEntry = navController.currentBackStackEntryAsState().value
+    val currentDestination = navBackStackEntry?.destination
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         tonalElevation = 3.dp
     ) {
+        // --- EXPLORAR / FEED ---
+        val isFeedSelected = currentDestination?.hierarchy?.any { it.route?.contains("FeedRoute") == true } == true
         NavigationBarItem(
-            selected = currentRoute is FeedRoute,
-            onClick = { onNavigate(FeedRoute) },
+            selected = isFeedSelected,
+            onClick = { navigateToTab(navController, FeedRoute) },
             label = { Text("Explorar") },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Explore,
-                    contentDescription = "Feed"
-                )
-            },
+            icon = { Icon(Icons.Default.Explore, contentDescription = "Feed") },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 selectedTextColor = MaterialTheme.colorScheme.primary,
-                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                indicatorColor = MaterialTheme.colorScheme.primaryContainer
             )
         )
 
+        // --- SUPLENCIAS / BANDEJA ---
+        val isGigSelected = currentDestination?.hierarchy?.any { it.route?.contains("GigRequestsRoute") == true } == true
         NavigationBarItem(
-            selected = false,
-            enabled = false,
-            onClick = { },
+            selected = isGigSelected,
+            onClick = { navigateToTab(navController, GigRequestsRoute) },
             label = { Text("Suplencias") },
-            icon = {
-                Icon(
-                    Icons.Default.CalendarMonth,
-                    contentDescription = null
-                )
-            }
+            icon = { Icon(Icons.Default.CalendarMonth, contentDescription = null) }
         )
 
-        if (roleName?.equals("Musician", ignoreCase = true) == true) {
+        // --- LÓGICA DE ROL ---
+        if (roleName?.contains("Musician", ignoreCase = true) == true) {
+            // Perfil
+            val isProfileSelected = currentDestination?.hierarchy?.any { it.route?.contains("MyProfileRoute") == true } == true
             NavigationBarItem(
-                selected = currentRoute is MyProfileRoute,
-                onClick = { onNavigate(MyProfileRoute) },
+                selected = isProfileSelected,
+                onClick = { navigateToTab(navController, MyProfileRoute) },
                 label = { Text("Mi Perfil") },
-                icon = {
-                    Icon(
-                        Icons.Default.Person,
-                        contentDescription = null
-                    )
-                }
+                icon = { Icon(Icons.Default.Person, contentDescription = null) }
             )
+            // Reseñas
+            val isReviewsSelected = currentDestination?.hierarchy?.any { it.route?.contains("MyReviewsRoute") == true } == true
             NavigationBarItem(
-                selected = currentRoute is MyReviewsRoute,
-                onClick = { onNavigate(MyReviewsRoute) },
+                selected = isReviewsSelected,
+                onClick = { navigateToTab(navController, MyReviewsRoute) },
                 label = { Text("Reseñas") },
-                icon = {
-                    Icon(
-                        Icons.Default.Star,
-                        contentDescription = "Mis Reseñas"
-                    )
-                }
+                icon = { Icon(Icons.Default.Star, contentDescription = "Mis Reseñas") }
             )
         } else {
+            // Botón Salir para Reclutadores
             NavigationBarItem(
                 selected = false,
                 onClick = onLogout,
                 label = { Text("Salir") },
                 icon = {
-                    Icon(
-                        Icons.Default.Logout,
-                        contentDescription = "Cerrar Sesión",
-                        tint = MaterialTheme.colorScheme.error
-                    )
+                    Icon(Icons.Default.Logout, contentDescription = "Salir", tint = MaterialTheme.colorScheme.error)
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    unselectedIconColor = MaterialTheme.colorScheme.error,
                     unselectedTextColor = MaterialTheme.colorScheme.error
                 )
             )
         }
+    }
+}
+
+private fun navigateToTab(navController: NavHostController, route: Any) {
+    navController.navigate(route) {
+        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
     }
 }

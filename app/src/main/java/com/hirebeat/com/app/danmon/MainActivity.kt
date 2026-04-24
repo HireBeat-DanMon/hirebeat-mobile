@@ -13,7 +13,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hirebeat.com.app.danmon.core.data.SessionManager
 import com.hirebeat.com.app.danmon.core.navigation.*
-import com.hirebeat.com.app.danmon.core.presentation.components.HireBeatBottomBar
+import com.hirebeat.com.app.danmon.core.presentation.components.HireBeatBottomNavigation
 import com.hirebeat.com.app.danmon.core.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
@@ -48,19 +48,15 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     bottomBar = {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentRoute = navBackStackEntry?.destination?.route
+
                         val isAuthScreen = currentRoute?.contains("AuthRoute") == true
 
                         if (!isAuthScreen) {
-                            HireBeatBottomBar(
-                                currentRoute = currentRoute,
+                            HireBeatBottomNavigation(
+                                navController = navController,
                                 roleName = roleName,
-                                onNavigate = { route ->
-                                    navController.navigate(route) {
-                                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                },
                                 onLogout = {
                                     navController.navigate(AuthRoute) {
                                         popUpTo(0) { inclusive = true }
