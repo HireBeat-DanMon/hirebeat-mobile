@@ -25,12 +25,11 @@ class MyReviewsViewModel @Inject constructor(
 
     private fun loadMyReviews() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
-            try {
-                val reviews = getMyReviewsUseCase.execute()
-                _uiState.update { it.copy(reviews = reviews, isLoading = false) }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = e.localizedMessage) }
+            _uiState.update { it.copy(isLoading = true) }
+            getMyReviewsUseCase.execute().collect { reviewsList ->
+                _uiState.update {
+                    it.copy(reviews = reviewsList, isLoading = false)
+                }
             }
         }
     }

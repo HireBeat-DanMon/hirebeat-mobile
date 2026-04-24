@@ -1,9 +1,21 @@
 package com.hirebeat.com.app.danmon.core.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 
-val AppTypography = Typography()
+private val defaultTypography = Typography()
+
+val AppTypography = Typography(
+
+    displayMedium = defaultTypography.displayMedium.copy(
+        fontWeight = FontWeight.Bold
+    ),
+
+    titleMedium = defaultTypography.titleMedium.copy(
+        fontWeight = FontWeight.Bold
+    ),
+
+    labelLarge = defaultTypography.labelLarge.copy(
+        fontWeight = FontWeight.Bold
+    )
+)

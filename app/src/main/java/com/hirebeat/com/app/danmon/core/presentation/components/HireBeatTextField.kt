@@ -21,6 +21,8 @@ fun HireBeatTextField(
     label: String,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
+    isError: Boolean = false,
+    errorMessage: String? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     imeAction: ImeAction = ImeAction.Next,
     keyboardActions: KeyboardActions = KeyboardActions.Default
@@ -30,6 +32,10 @@ fun HireBeatTextField(
         onValueChange = onValueChange,
         label = { Text(label) },
         modifier = modifier.fillMaxWidth(),
+        isError = isError,
+        supportingText = if (isError && errorMessage != null) {
+            { Text(text = errorMessage) }
+        } else null,
         trailingIcon = trailingIcon,
         shape = RoundedCornerShape(Sizing.CardCorner),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
@@ -39,9 +45,8 @@ fun HireBeatTextField(
         ),
         keyboardActions = keyboardActions,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            errorBorderColor = MaterialTheme.colorScheme.error
         )
     )
 }

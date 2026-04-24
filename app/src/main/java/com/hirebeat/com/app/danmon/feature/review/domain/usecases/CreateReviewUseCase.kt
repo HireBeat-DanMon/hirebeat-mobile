@@ -7,7 +7,7 @@ import javax.inject.Inject
 class CreateReviewUseCase @Inject constructor(
     private val repository: ReviewRepository
 ) {
-    suspend fun execute(request: CreateReviewRequestDto): String {
-        return repository.createReview(request)
+    suspend fun execute(request: CreateReviewRequestDto) {
+        repository.createReview(request)
     }
 }

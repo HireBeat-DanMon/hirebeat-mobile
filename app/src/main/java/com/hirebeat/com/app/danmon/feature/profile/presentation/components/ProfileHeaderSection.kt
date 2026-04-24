@@ -21,10 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 import com.hirebeat.com.app.danmon.feature.profile.domain.entities.*
 
@@ -32,7 +30,9 @@ import com.hirebeat.com.app.danmon.feature.profile.domain.entities.*
 fun ProfileHeaderSection(
     name: String,
     city: String,
-    instruments: List<ProfileInstrument>
+    instruments: List<ProfileInstrument>,
+    averageRating: Float,
+    modifier: Modifier = Modifier
 ) {
     val mainInstrument = instruments.find { it.isPrincipal }?.instrument?.name ?: "Músico"
     val level = instruments.find { it.isPrincipal }?.level ?: ""
@@ -41,27 +41,37 @@ fun ProfileHeaderSection(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
             Text(
                 text = name,
                 style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
             )
 
             Surface(
-                color = Color(0xFFFFDBCB).copy(alpha = 0.5f),
+                color = MaterialTheme.colorScheme.tertiaryContainer,
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = Spacing.Medium, vertical = Spacing.Small),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.Star, null, tint = Color(0xFFFFB800), modifier = Modifier.size(18.dp))
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier.size(18.dp)
+                    )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("4.8", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+                    Text(
+                        text = if (averageRating > 0) String.format("%.1f", averageRating) else "—",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                    )
                 }
             }
         }
@@ -69,27 +79,48 @@ fun ProfileHeaderSection(
         Spacer(modifier = Modifier.height(Spacing.Medium))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = mainInstrument, color = Color(0xFF8D4E2C), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(
+                text = mainInstrument,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
             if (level.isNotEmpty()) {
-                Text(text = " • ", color = Color.Gray)
-                Text(text = level, color = Color.Gray, fontSize = 16.sp)
+                Text(
+                    text = " • ",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = level,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
 
         Spacer(modifier = Modifier.height(Spacing.Medium))
 
         Surface(
-            color = Color.White,
+            color = MaterialTheme.colorScheme.surfaceContainerLow,
             shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.5f))
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = Spacing.Medium, vertical = Spacing.Small),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.LocationOn, null, tint = Color(0xFFC97E58), modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(city, style = MaterialTheme.typography.bodyMedium, color = Color.Black)
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = city,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     }

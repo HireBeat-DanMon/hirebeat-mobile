@@ -9,7 +9,7 @@ data class ProfileResponseDto(
     @SerializedName("id") val id: String? = null,
     @SerializedName("email") val email: String? = null,
     @SerializedName("fullname") val fullname: String? = null,
-     val imageUrl: String? = null,
+    @SerializedName("imageUrl") val imageUrl: String? = null,
     @SerializedName("city") val city: String? = null,
     @SerializedName("experience") val experience: Int? = null,
     @SerializedName("descripcion") val descripcion: String? = null,

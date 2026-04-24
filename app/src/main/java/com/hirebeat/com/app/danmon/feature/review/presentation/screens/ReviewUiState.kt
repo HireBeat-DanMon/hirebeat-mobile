@@ -8,5 +8,9 @@ data class ReviewUiState(
     val isSubmitting: Boolean = false,
     val error: String? = null,
     val showAddModal: Boolean = false,
-    val hasAlreadyReviewed: Boolean = false // Bloquea si ya existe una reseña de este usuario
+    val hasAlreadyReviewed: Boolean = false,
+    val averageRating: Float = 0f,
+
+    val ratingInput: Int = 0,
+    val commentInput: String = ""
 )

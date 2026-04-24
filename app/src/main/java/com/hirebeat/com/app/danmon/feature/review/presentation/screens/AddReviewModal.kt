@@ -20,16 +20,17 @@ import com.hirebeat.com.app.danmon.core.theme.Spacing
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddReviewModal(
+    rating: Int, // Recibe el valor desde el State del ViewModel
+    comment: String, // Recibe el valor desde el State del ViewModel
+    onRatingChange: (Int) -> Unit, // Función para actualizar en el ViewModel
+    onCommentChange: (String) -> Unit, // Función para actualizar en el ViewModel
     onDismiss: () -> Unit,
-    onSubmit: (rating: Int, comment: String) -> Unit,
+    onSubmit: () -> Unit, // Ya no necesita parámetros aquí, el VM los tiene en su State
     isSubmitting: Boolean
 ) {
-    var rating by remember { mutableIntStateOf(0) }
-    var comment by remember { mutableStateOf("") }
-
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = Color(0xFFFAF6F3), // Color crema del fondo de la imagen
+        containerColor = Color(0xFFFAF6F3),
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     ) {
         Column(
@@ -37,7 +38,7 @@ fun AddReviewModal(
                 .fillMaxWidth()
                 .padding(Spacing.Large)
         ) {
-            // Header del Modal
+            // Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -46,7 +47,7 @@ fun AddReviewModal(
                 Text(
                     text = "Escribir Reseña",
                     style = MaterialTheme.typography.titleLarge,
-                    color = Color(0xFF8D4E2C), // Color primary
+                    color = Color(0xFF8D4E2C),
                     fontWeight = FontWeight.Bold
                 )
                 IconButton(
@@ -61,7 +62,6 @@ fun AddReviewModal(
 
             Spacer(modifier = Modifier.height(Spacing.Large))
 
-            // Estrellas
             Text(
                 text = "CALIFICACIÓN",
                 style = MaterialTheme.typography.labelSmall,
@@ -79,14 +79,13 @@ fun AddReviewModal(
                         tint = if (star <= rating) Color(0xFFFFB800) else Color.LightGray,
                         modifier = Modifier
                             .size(40.dp)
-                            .clickable { rating = star }
+                            .clickable { onRatingChange(star) } // Notifica al ViewModel
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(Spacing.Medium))
 
-            // Comentario
             Text(
                 text = "DETALLES DE LA EXPERIENCIA",
                 style = MaterialTheme.typography.labelSmall,
@@ -96,7 +95,7 @@ fun AddReviewModal(
             Spacer(modifier = Modifier.height(Spacing.ExtraSmall))
             OutlinedTextField(
                 value = comment,
-                onValueChange = { comment = it },
+                onValueChange = { onCommentChange(it) }, // Notifica al ViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
@@ -112,7 +111,6 @@ fun AddReviewModal(
 
             Spacer(modifier = Modifier.height(Spacing.Large))
 
-            // Botones (Estilo de la imagen)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.Medium)
@@ -132,13 +130,13 @@ fun AddReviewModal(
                 }
 
                 Button(
-                    onClick = { onSubmit(rating, comment) },
+                    onClick = onSubmit, // Llama a la función del VM
                     modifier = Modifier
                         .weight(1f)
                         .height(56.dp),
-                    enabled = !isSubmitting,
+                    enabled = !isSubmitting && rating > 0, // Validación básica
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF3B5D55), // Verde oscuro de la imagen
+                        containerColor = Color(0xFF3B5D55),
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(16.dp)

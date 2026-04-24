@@ -21,24 +21,32 @@ import androidx.compose.ui.unit.dp
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 
 @Composable
-fun SectionTitleView(title: String, iconColor: Color) {
+fun SectionTitleView(
+    title: String,
+    modifier: Modifier = Modifier,
+    indicatorColor: Color = MaterialTheme.colorScheme.primary
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.Small)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = Spacing.Small)
     ) {
         Box(
             modifier = Modifier
                 .width(4.dp)
-                .height(16.dp)
+                .height(18.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(iconColor)
+                .background(indicatorColor)
         )
+
         Spacer(modifier = Modifier.width(Spacing.Small))
+
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
+            fontWeight = FontWeight.ExtraBold,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.hirebeat.com.app.danmon.core.theme.GoldStar
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 import com.hirebeat.com.app.danmon.feature.review.domain.entities.Review
 import com.hirebeat.com.app.danmon.feature.review.presentation.screens.AddReviewModal
@@ -17,15 +18,18 @@ import com.hirebeat.com.app.danmon.feature.review.presentation.screens.AddReview
 @Composable
 fun ReviewsSection(
     reviews: List<Review>,
+    ratingInput: Int,
+    commentInput: String,
+    onRatingChange: (Int) -> Unit,
+    onCommentChange: (String) -> Unit,
     hasAlreadyReviewed: Boolean,
     showAddModal: Boolean,
     isSubmitting: Boolean,
     onToggleModal: (Boolean) -> Unit,
-    onSubmitReview: (Int, String) -> Unit,
+    onSubmitReview: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        // Botón para agregar reseña
         if (!hasAlreadyReviewed) {
             TextButton(
                 onClick = { onToggleModal(true) },
@@ -35,7 +39,6 @@ fun ReviewsSection(
             }
         }
 
-        // Lista de reseñas o estado vacío
         if (reviews.isEmpty()) {
             Text(
                 text = "Aún no hay reseñas.",
@@ -62,7 +65,7 @@ fun ReviewsSection(
                                 Icon(
                                     imageVector = Icons.Default.Star,
                                     contentDescription = null,
-                                    tint = Color(0xFFFFB800),
+                                    tint = GoldStar,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -79,13 +82,14 @@ fun ReviewsSection(
             }
         }
 
-        // Modal para escribir reseña
         if (showAddModal) {
             AddReviewModal(
+                rating = ratingInput,
+                comment = commentInput,
+                onRatingChange = onRatingChange,
+                onCommentChange = onCommentChange,
                 onDismiss = { onToggleModal(false) },
-                onSubmit = { rating, comment ->
-                    onSubmitReview(rating, comment)
-                },
+                onSubmit = onSubmitReview,
                 isSubmitting = isSubmitting
             )
         }

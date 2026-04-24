@@ -3,7 +3,6 @@ package com.hirebeat.com.app.danmon.feature.profile.presentation.screens
 import com.hirebeat.com.app.danmon.feature.review.presentation.screens.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -13,7 +12,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.hirebeat.com.app.danmon.feature.review.presentation.components.*
@@ -27,6 +25,7 @@ import com.hirebeat.com.app.danmon.feature.profile.presentation.components.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.ProfileDetailViewModel
 import com.hirebeat.com.app.danmon.feature.review.presentation.viewmodels.ReviewViewModel
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProfileScreen(
     userId: String,
@@ -46,33 +45,42 @@ fun ProfileScreen(
 
     if (state.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
         return
     }
 
     if (profile == null && state.error != null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = state.error ?: "Error al cargar el perfil", color = Color.Red)
+            Text(
+                text = state.error ?: "Error al cargar el perfil",
+                color = MaterialTheme.colorScheme.error
+            )
         }
         return
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding()
                     .padding(Spacing.Medium),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.Start
             ) {
                 IconButton(
                     onClick = onBack,
-                    modifier = Modifier.background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)
+                    )
                 ) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = Color.White)
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Atrás",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         },
@@ -80,116 +88,124 @@ fun ProfileScreen(
             ProfileContactBar(profile)
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+        ) {
+            AsyncImage(
+                model = profile?.photoUrl,
+                contentDescription = "Foto de perfil",
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .verticalScroll(scrollState)
+                    .fillMaxWidth()
+                    .height(300.dp),
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = android.R.drawable.ic_menu_gallery),
+                error = painterResource(id = android.R.drawable.ic_menu_report_image)
+            )
+
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = (-Spacing.Large)),
+                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 1.dp
             ) {
-
-                AsyncImage(
-                    model = profile?.photoUrl,
-                    contentDescription = "Foto de perfil de ${profile?.fullName}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300.dp),
-                    contentScale = ContentScale.Crop,
-                    placeholder = painterResource(id = android.R.drawable.ic_menu_gallery),
-                    error = painterResource(id = android.R.drawable.ic_menu_report_image)
-                )
-
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = (-Spacing.Large)),
-                    shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
-                    color = MaterialTheme.colorScheme.background
+                Column(
+                    modifier = Modifier.padding(Spacing.Large),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.Medium)
                 ) {
-                    Column(
-                        modifier = Modifier.padding(Spacing.Large),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.Medium)
-                    ) {
-                        ProfileHeaderSection(
-                            name = profile?.fullName ?: "Usuario",
-                            city = profile?.city ?: "Ubicación no disponible",
-                            instruments = profile?.instruments ?: emptyList()
-                        )
+                    ProfileHeaderSection(
+                        name = profile?.fullName ?: "Músico HireBeat",
+                        city = profile?.city ?: "Chiapas, México",
+                        instruments = profile?.instruments ?: emptyList(),
+                        averageRating = reviewState.averageRating
+                    )
 
-                        HorizontalDivider(
-                            color = MaterialTheme.colorScheme.outlineVariant.copy(
-                                alpha = 0.5f
-                            )
-                        )
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant
+                    )
 
-                        SectionTitleView(title = "Sobre mí", iconColor = Color(0xFF8D4E2C))
-                        Text(
-                            text = profile?.description ?: "Sin descripción disponible.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            lineHeight = 22.sp,
-                            color = Color.Black.copy(alpha = 0.8f)
-                        )
+                    SectionTitleView(title = "Sobre mí")
+                    Text(
+                        text = profile?.description ?: "Este músico aún no ha agregado una descripción.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        lineHeight = 22.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
 
-                        if (profile?.instruments?.isNotEmpty() == true) {
-                            SectionTitleView(title = "Instrumentos", iconColor = Color(0xFF4A6572)) // Puedes cambiar el color
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(Spacing.Small),
-                                verticalArrangement = Arrangement.spacedBy(Spacing.Small),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                profile.instruments.forEach { instrument ->
-                                    GenreChip(
-                                        name = instrument.instrument.name,
-                                        isSelected = true,
-                                        onClick = {}
-                                    )
-                                }
-                            }
-                        }
-
-                        if (profile?.genres?.isNotEmpty() == true) {
-                            SectionTitleView(title = "Especialidad", iconColor = Color(0xFFC97E58))
-                            FlowRow(
-                                horizontalArrangement = Arrangement.spacedBy(Spacing.Small),
-                                verticalArrangement = Arrangement.spacedBy(Spacing.Small),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                profile.genres.forEach { genre ->
-                                    GenreChip(name = genre.name, isSelected = true, onClick = {})
-                                }
-                            }
-                        }
-
+                    if (profile?.instruments?.isNotEmpty() == true) {
                         SectionTitleView(
-                            title = "Reseñas y Calificaciones",
-                            iconColor = Color(0xFF5C4033)
+                            title = "Instrumentos",
+                            indicatorColor = MaterialTheme.colorScheme.secondary
                         )
-
-                        ReviewsSection(
-                            reviews = reviewState.reviews,
-                            hasAlreadyReviewed = reviewState.hasAlreadyReviewed,
-                            showAddModal = reviewState.showAddModal,
-                            isSubmitting = reviewState.isSubmitting,
-                            onToggleModal = { reviewViewModel.toggleModal(it) },
-                            onSubmitReview = { rating, comment ->
-                                reviewViewModel.submitReview(rating, comment)
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            profile.instruments.forEach { instrument ->
+                                GenreChip(
+                                    name = instrument.instrument.name,
+                                    isSelected = true,
+                                    onClick = {}
+                                )
                             }
-                        )
-
-                        if (reviewState.showAddModal) {
-                            AddReviewModal(
-                                onDismiss = { reviewViewModel.toggleModal(false) },
-                                onSubmit = { rating, comment ->
-                                    reviewViewModel.submitReview(rating, comment)
-                                },
-                                isSubmitting = reviewState.isSubmitting
-                            )
                         }
-
-                        Spacer(modifier = Modifier.height(innerPadding.calculateBottomPadding() + Spacing.Small))
                     }
+
+                    if (profile?.genres?.isNotEmpty() == true) {
+                        SectionTitleView(
+                            title = "Especialidad",
+                            indicatorColor = MaterialTheme.colorScheme.tertiary
+                        )
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            profile.genres.forEach { genre ->
+                                GenreChip(name = genre.name, isSelected = true, onClick = {})
+                            }
+                        }
+                    }
+
+                    SectionTitleView(
+                        title = "Reseñas y Calificaciones",
+                        indicatorColor = MaterialTheme.colorScheme.outline
+                    )
+
+                    ReviewsSection(
+                        reviews = reviewState.reviews,
+                        ratingInput = reviewState.ratingInput,
+                        commentInput = reviewState.commentInput,
+                        onRatingChange = { reviewViewModel.onRatingChange(it) },
+                        onCommentChange = { reviewViewModel.onCommentChange(it) },
+                        hasAlreadyReviewed = reviewState.hasAlreadyReviewed,
+                        showAddModal = reviewState.showAddModal,
+                        isSubmitting = reviewState.isSubmitting,
+                        onToggleModal = { reviewViewModel.toggleModal(it) },
+                        onSubmitReview = { reviewViewModel.submitReview() }
+                    )
+
+                    Spacer(modifier = Modifier.height(innerPadding.calculateBottomPadding() + 24.dp))
                 }
             }
         }
+    }
+
+    if (reviewState.showAddModal) {
+        AddReviewModal(
+            rating = reviewState.ratingInput,
+            comment = reviewState.commentInput,
+            onRatingChange = { reviewViewModel.onRatingChange(it) },
+            onCommentChange = { reviewViewModel.onCommentChange(it) },
+            onDismiss = { reviewViewModel.toggleModal(false) },
+            onSubmit = {
+                reviewViewModel.submitReview()
+            },
+            isSubmitting = reviewState.isSubmitting
+        )
     }
 }

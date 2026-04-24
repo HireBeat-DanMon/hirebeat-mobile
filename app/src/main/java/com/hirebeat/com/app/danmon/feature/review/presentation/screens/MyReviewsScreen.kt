@@ -3,7 +3,6 @@ package com.hirebeat.com.app.danmon.feature.review.presentation.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,7 +13,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hirebeat.com.app.danmon.core.presentation.components.HireBeatTopBar
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 import com.hirebeat.com.app.danmon.feature.review.presentation.viewmodels.MyReviewsViewModel
-import com.hirebeat.com.app.danmon.feature.profile.presentation.components.ReviewCardMock // Puedes renombrarlo a ReviewCard real
 import com.hirebeat.com.app.danmon.feature.review.presentation.components.ReviewsSection
 
 @Composable
@@ -49,11 +47,15 @@ fun MyReviewsScreen(
                     item {
                         ReviewsSection(
                             reviews = state.reviews,
+                            ratingInput = 0,
+                            commentInput = "",
+                            onRatingChange = { },
+                            onCommentChange = { },
                             hasAlreadyReviewed = true,
                             showAddModal = false,
                             isSubmitting = false,
                             onToggleModal = { },
-                            onSubmitReview = { _, _ -> }
+                            onSubmitReview = { }
                         )
                     }
                 }

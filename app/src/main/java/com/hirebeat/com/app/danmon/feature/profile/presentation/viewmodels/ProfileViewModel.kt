@@ -51,23 +51,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun loadProfile(userId: String?) {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            try {
-                val profile = if (userId == null || userId == "my_id") {
-                    getMyProfileUseCase.execute()
-                } else {
-                    getAllProfilesUseCases.execute().find { it.id == userId }
-                }
-
-                _uiState.update { it.copy(userProfile = profile, isLoading = false) }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = e.localizedMessage) }
-            }
-        }
-    }
-
     private fun updateFieldsWithProfile(profile: UserProfile) {
         _uiState.update {
             it.copy(
@@ -157,7 +140,6 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    // Funciones de UI
     fun onExperienceChange(v: String) = _uiState.update { it.copy(experience = v) }
     fun onDescriptionChange(v: String) = _uiState.update { it.copy(description = v) }
     fun onCityChange(v: String) = _uiState.update { it.copy(city = v) }
@@ -204,7 +186,7 @@ class ProfileViewModel @Inject constructor(
                         val address = addresses[0]
                         val cityName = address.locality ?: address.subAdminArea ?: address.adminArea ?: "Ciudad desconocida"
 
-                        onCityChange(cityName) // Ahora pone el nombre, no coordenadas
+                        onCityChange(cityName)
                     } else {
                         onCityChange("${point.latitude}, ${point.longitude}")
                     }

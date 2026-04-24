@@ -32,6 +32,8 @@ uiText = "1.10.6"
 uiGraphics = "1.10.6"
 navigationRuntimeKtx = "2.9.7"
 datastore = "1.0.0"
+uiTextVersion = "1.11.0"
+room = "2.8.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,6 +74,10 @@ androidx-compose-ui-text = { group = "androidx.compose.ui", name = "ui-text", ve
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiTextVersion" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 [bundles]
 network = ["com-squareup-retrofit2-retrofit", "com-squareup-retrofit2-converter-json", "okhttp-core", "okhttp-logging"]

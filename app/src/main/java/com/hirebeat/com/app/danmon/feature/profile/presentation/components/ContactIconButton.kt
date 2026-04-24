@@ -13,20 +13,26 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ContactIconButton(icon: ImageVector, backgroundColor: Color, onClick: () -> Unit) {
+fun ContactIconButton(
+    icon: ImageVector,
+    backgroundColor: Color,
+    onClick: () -> Unit,
+    contentColor: Color
+) {
     Surface(
         onClick = onClick,
         modifier = Modifier.size(48.dp),
         shape = CircleShape,
         color = backgroundColor,
-        shadowElevation = 2.dp
+        shadowElevation = 2.dp,
+        tonalElevation = 2.dp
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Color(0xFF8D4E2C),
-                modifier = Modifier.size(22.dp)
+                tint = contentColor,
+                modifier = Modifier.size(24.dp)
             )
         }
     }

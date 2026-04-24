@@ -10,13 +10,17 @@ import androidx.compose.ui.text.font.FontWeight
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 
 @Composable
-fun SectionTitle(title: String) {
+fun SectionTitle(
+    title: String,
+    modifier: Modifier = Modifier
+) {
     Text(
         text = title,
-        style = MaterialTheme.typography.labelMedium,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.ExtraBold,
+        color = MaterialTheme.colorScheme.onSurface,
+        modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = Spacing.Small)
+            .padding(top = Spacing.Medium, bottom = Spacing.Small)
     )
 }

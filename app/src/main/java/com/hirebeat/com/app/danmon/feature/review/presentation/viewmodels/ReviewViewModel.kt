@@ -2,7 +2,6 @@ package com.hirebeat.com.app.danmon.feature.review.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hirebeat.com.app.danmon.core.data.SessionManager
 import com.hirebeat.com.app.danmon.feature.review.data.datasource.remote.model.CreateReviewRequestDto
 import com.hirebeat.com.app.danmon.feature.review.domain.usecases.*
 import com.hirebeat.com.app.danmon.feature.review.presentation.screens.ReviewUiState
@@ -14,8 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ReviewViewModel @Inject constructor(
     private val getProfileReviewsUseCase: GetProfileReviewsUseCase,
-    private val createReviewUseCase: CreateReviewUseCase,
-    private val sessionManager: SessionManager
+    private val createReviewUseCase: CreateReviewUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ReviewUiState())
@@ -29,38 +27,45 @@ class ReviewViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             try {
                 val reviews = getProfileReviewsUseCase.execute(profileId)
-                _uiState.update { it.copy(reviews = reviews, isLoading = false) }
+
+                val average = if (reviews.isNotEmpty()) {
+                    reviews.map { it.rating }.average().toFloat()
+                } else 0f
+
+                _uiState.update { it.copy(
+                    reviews = reviews,
+                    averageRating = average,
+                    isLoading = false
+                ) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false, error = e.localizedMessage) }
             }
         }
     }
 
-    fun submitReview(rating: Int, comment: String) {
-        if (rating == 0 || comment.isBlank()) {
-            _uiState.update { it.copy(error = "Calificación y comentario son obligatorios") }
-            return
-        }
+    fun submitReview() {
+        val rating = uiState.value.ratingInput
+        val comment = uiState.value.commentInput
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isSubmitting = true, error = null) }
+            _uiState.update { it.copy(isSubmitting = true) }
             try {
                 val request = CreateReviewRequestDto(currentProfileId, rating, comment)
-
                 createReviewUseCase.execute(request)
-
-                _uiState.update {
-                    it.copy(
-                        isSubmitting = false,
-                        showAddModal = false,
-                        hasAlreadyReviewed = true
-                    )
-                }
+                _uiState.update { it.copy(isSubmitting = false, showAddModal = false, ratingInput = 0, commentInput = "") }
                 loadReviews(currentProfileId)
             } catch (e: Exception) {
                 _uiState.update { it.copy(isSubmitting = false, error = e.localizedMessage) }
             }
         }
+    }
+
+    fun onRatingChange(newRating: Int) {
+        _uiState.update { it.copy(ratingInput = newRating) }
+    }
+
+    fun onCommentChange(newComment: String) {
+        _uiState.update { it.copy(commentInput = newComment) }
     }
 
     fun toggleModal(show: Boolean) = _uiState.update { it.copy(showAddModal = show) }

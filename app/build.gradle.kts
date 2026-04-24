@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.text)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.ui.text)
 
     testImplementation(libs.junit)
 
@@ -94,7 +95,12 @@ dependencies {
     implementation(libs.hilt.android)                               // Implementación de Hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.play.services.location)
-    ksp(libs.hilt.compiler)                                         // KSP
+    ksp(libs.hilt.compiler)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
     implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)

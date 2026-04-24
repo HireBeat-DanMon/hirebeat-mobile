@@ -24,7 +24,7 @@ fun RoleCard(
     Card(
         onClick = onClick,
         modifier = modifier.height(100.dp),
-        shape = RoundedCornerShape(Sizing.CardCorner),
+        shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer
             else MaterialTheme.colorScheme.surface
@@ -40,15 +40,14 @@ fun RoleCard(
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                imageVector = if (text.contains("Músico")) Icons.Default.Person else Icons.Default.Groups,
+                imageVector = if (text.contains("Soy")) Icons.Default.Person else Icons.Default.Groups,
                 contentDescription = null,
-                tint = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                tint = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant            )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelMedium,
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-            )
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant            )
         }
     }
 }
