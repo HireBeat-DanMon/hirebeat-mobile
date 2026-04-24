@@ -102,6 +102,7 @@ dependencies {
     ksp(libs.room.compiler)
 
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.google.code.gson)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
