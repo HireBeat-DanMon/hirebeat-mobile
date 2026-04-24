@@ -8,5 +8,5 @@ import javax.inject.Inject
 class GetMyReviewsUseCase @Inject constructor(
     private val repository: ReviewRepository
 ) {
-    fun execute(): Flow<List<Review>> = repository.getMyReviews()
+    suspend fun execute(): Flow<List<Review>> = repository.getMyReviews()
 }
