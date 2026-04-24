@@ -6,12 +6,19 @@ import com.hirebeat.com.app.danmon.feature.review.domain.entities.Review
 
 fun ReviewResponseDto.toDomain() = Review(id, reviewerName, rating, comment, createdAt)
 
-fun ReviewResponseDto.toEntity(profileId: String) = ReviewEntity(
-    id = id,
-    reviewerName = reviewerName,
-    rating = rating,
-    comment = comment,
-    createdAt = createdAt,
-    profileId = profileId
+fun ReviewResponseDto.toEntity() = ReviewEntity(
+    id = this.id,
+    reviewerName = this.reviewerName,
+    rating = this.rating,
+    comment = this.comment,
+    createdAt = this.createdAt,
+    profileId = "my_own_profile"
 )
-fun ReviewEntity.toDomain() = Review(id, reviewerName, rating, comment, createdAt)
+
+fun ReviewEntity.toDomain() = Review(
+    id = this.id,
+    reviewerName = this.reviewerName,
+    rating = this.rating,
+    comment = this.comment,
+    createdAt = this.createdAt
+)

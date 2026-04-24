@@ -21,11 +21,12 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "app_database"
+            "hirebeat_db"
         ).build()
     }
 
     @Provides
+    @Singleton
     fun provideReviewDao(database: AppDatabase): ReviewDao {
         return database.reviewDao()
     }

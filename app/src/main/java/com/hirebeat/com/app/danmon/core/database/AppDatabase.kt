@@ -6,13 +6,10 @@ import com.hirebeat.com.app.danmon.feature.review.data.datasource.local.dao.Revi
 import com.hirebeat.com.app.danmon.feature.review.data.datasource.local.entity.ReviewEntity
 
 @Database(
-    entities = [
-        ReviewEntity::class
-    ],
+    entities = [ReviewEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-
     abstract fun reviewDao(): ReviewDao
 }
