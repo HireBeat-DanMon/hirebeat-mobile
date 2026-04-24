@@ -1,4 +1,4 @@
-package com.hirebeat.com.app.danmon.feature.gig_requests.presentation.viewmodels
+package com.hirebeat.com.app.danmon.feature.gig_requests.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

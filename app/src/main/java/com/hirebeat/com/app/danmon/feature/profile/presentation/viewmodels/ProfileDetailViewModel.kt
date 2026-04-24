@@ -2,7 +2,6 @@ package com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hirebeat.com.app.danmon.feature.profile.domain.entities.UserProfile
 import com.hirebeat.com.app.danmon.feature.profile.domain.usecases.GetProfileByIdUseCase
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.ProfileUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

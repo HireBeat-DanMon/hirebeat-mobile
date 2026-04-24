@@ -28,9 +28,9 @@ fun RequestsToggle(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-            .clip(RoundedCornerShape(28.dp)) // Forma de píldora
+            .clip(RoundedCornerShape(28.dp))
             .background(Color.White)
-            .padding(4.dp), // Pequeño padding interno
+            .padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(

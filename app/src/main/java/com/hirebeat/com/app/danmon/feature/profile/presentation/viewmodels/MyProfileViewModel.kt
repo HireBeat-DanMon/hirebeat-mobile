@@ -4,18 +4,13 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hirebeat.com.app.danmon.core.data.SessionManager
-import com.hirebeat.com.app.danmon.core.hardware.domain.*
-import com.hirebeat.com.app.danmon.core.permission.domain.PermissionChecker
-import com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.model.*
 import com.hirebeat.com.app.danmon.feature.profile.domain.entities.*
 import com.hirebeat.com.app.danmon.feature.profile.domain.usecases.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.ProfileUiState
-import android.location.Geocoder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel

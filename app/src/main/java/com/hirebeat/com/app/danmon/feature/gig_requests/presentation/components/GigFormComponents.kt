@@ -24,7 +24,7 @@ fun FormFieldLabel(text: String) {
         text = text.uppercase(),
         style = MaterialTheme.typography.labelSmall,
         fontWeight = FontWeight.ExtraBold,
-        color = Color(0xFF8D4E2C), // Tu color café/naranja (Primary)
+        color = Color(0xFF8D4E2C),
         letterSpacing = 1.sp,
         modifier = Modifier.padding(bottom = 6.dp, start = 4.dp)
     )
@@ -52,7 +52,7 @@ fun GigTextField(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = Color(0xFFC97E58) // Color secundario/acento
+                    tint = Color(0xFFC97E58)
                 )
             },
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
@@ -70,7 +70,6 @@ fun GigTextField(
     }
 }
 
-// --- MOLÉCULA: Campo Clickeable (Para Fecha y Horas) ---
 @Composable
 fun GigClickableField(
     label: String,

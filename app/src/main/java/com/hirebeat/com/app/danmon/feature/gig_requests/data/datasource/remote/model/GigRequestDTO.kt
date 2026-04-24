@@ -1,4 +1,3 @@
-// danmon/feature/gig_requests/data/datasource/remote/model/GigRequestDTO.kt
 package com.hirebeat.com.app.danmon.feature.gig_requests.data.datasource.remote.model
 
 import com.hirebeat.com.app.danmon.feature.gig_requests.domain.entities.GigRequestItem

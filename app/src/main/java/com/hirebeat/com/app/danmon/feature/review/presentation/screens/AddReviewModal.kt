@@ -20,12 +20,12 @@ import com.hirebeat.com.app.danmon.core.theme.Spacing
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddReviewModal(
-    rating: Int, // Recibe el valor desde el State del ViewModel
-    comment: String, // Recibe el valor desde el State del ViewModel
-    onRatingChange: (Int) -> Unit, // Función para actualizar en el ViewModel
-    onCommentChange: (String) -> Unit, // Función para actualizar en el ViewModel
+    rating: Int,
+    comment: String,
+    onRatingChange: (Int) -> Unit,
+    onCommentChange: (String) -> Unit,
     onDismiss: () -> Unit,
-    onSubmit: () -> Unit, // Ya no necesita parámetros aquí, el VM los tiene en su State
+    onSubmit: () -> Unit,
     isSubmitting: Boolean
 ) {
     ModalBottomSheet(
@@ -38,7 +38,6 @@ fun AddReviewModal(
                 .fillMaxWidth()
                 .padding(Spacing.Large)
         ) {
-            // Header
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -79,7 +78,7 @@ fun AddReviewModal(
                         tint = if (star <= rating) Color(0xFFFFB800) else Color.LightGray,
                         modifier = Modifier
                             .size(40.dp)
-                            .clickable { onRatingChange(star) } // Notifica al ViewModel
+                            .clickable { onRatingChange(star) }
                     )
                 }
             }
@@ -95,7 +94,7 @@ fun AddReviewModal(
             Spacer(modifier = Modifier.height(Spacing.ExtraSmall))
             OutlinedTextField(
                 value = comment,
-                onValueChange = { onCommentChange(it) }, // Notifica al ViewModel
+                onValueChange = { onCommentChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
@@ -130,11 +129,11 @@ fun AddReviewModal(
                 }
 
                 Button(
-                    onClick = onSubmit, // Llama a la función del VM
+                    onClick = onSubmit,
                     modifier = Modifier
                         .weight(1f)
                         .height(56.dp),
-                    enabled = !isSubmitting && rating > 0, // Validación básica
+                    enabled = !isSubmitting && rating > 0,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF3B5D55),
                         contentColor = Color.White

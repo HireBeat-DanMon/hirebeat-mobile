@@ -37,7 +37,6 @@ fun GigRequestCard(
     ) {
         Column(modifier = Modifier.padding(Spacing.Medium)) {
 
-            // --- Cabecera: Avatar, Nombre, Rol y Estado ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -54,7 +53,7 @@ fun GigRequestCard(
                     Spacer(modifier = Modifier.width(Spacing.Small))
                     Column {
                         Text(
-                            text = "Nombre del Usuario", // Aquí iría el nombre real
+                            text = "Nombre del Usuario",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = Color(0xFF221A16)
@@ -67,7 +66,6 @@ fun GigRequestCard(
                     }
                 }
 
-                // Badge de Estado
                 val (statusColor, statusBg, statusText) = when(request.status) {
                     "ACCEPTED" -> Triple(Color(0xFF3B6B61), Color(0xFFE8F0EE), "ACEPTADA")
                     "REJECTED" -> Triple(Color(0xFFB00020), Color(0xFFFDECEA), "RECHAZADA")
@@ -87,9 +85,8 @@ fun GigRequestCard(
 
             Spacer(modifier = Modifier.height(Spacing.Medium))
 
-            // --- Caja de Información del Evento ---
             Surface(
-                color = Color(0xFFF4EDE8), // Color beige claro de la imagen
+                color = Color(0xFFF4EDE8),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -103,7 +100,6 @@ fun GigRequestCard(
                 }
             }
 
-            // --- Botones de Acción (Solo si está PENDIENTE y es la vista correspondiente) ---
             if (isMusician && request.status == "PENDING") {
                 Spacer(modifier = Modifier.height(Spacing.Medium))
                 Row(

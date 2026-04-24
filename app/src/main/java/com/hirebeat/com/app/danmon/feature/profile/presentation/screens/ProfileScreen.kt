@@ -15,7 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,7 +22,7 @@ import coil.compose.AsyncImage
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 import com.hirebeat.com.app.danmon.feature.gig_requests.presentation.components.*
 import com.hirebeat.com.app.danmon.feature.gig_requests.presentation.screens.*
-import com.hirebeat.com.app.danmon.feature.gig_requests.presentation.viewmodels.GigRequestViewModel
+import com.hirebeat.com.app.danmon.feature.gig_requests.presentation.viewmodel.GigRequestViewModel
 import com.hirebeat.com.app.danmon.feature.profile.presentation.components.*
 import com.hirebeat.com.app.danmon.feature.profile.presentation.viewmodels.ProfileDetailViewModel
 import com.hirebeat.com.app.danmon.feature.review.presentation.components.*
@@ -50,7 +49,6 @@ fun ProfileScreen(
 
     val profile = state.userProfile
 
-    // Diálogos de Formulario
     var showGigForm by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
     var showStartTimePicker by remember { mutableStateOf(false) }
@@ -78,7 +76,6 @@ fun ProfileScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            // Barra de contacto y acción combinada
             Surface(
                 color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
                 shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
@@ -93,23 +90,7 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxWidth().padding(bottom = Spacing.Small),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        ContactIconButton(
-                            icon = Icons.Default.ChatBubbleOutline,
-                            backgroundColor = Color(0xFFE2D1CA),
-                            onClick = { }
-                        )
-
-                        ContactIconButton(
-                            icon = Icons.Default.Phone,
-                            backgroundColor = Color(0xFFFCEAE3),
-                            onClick = { }
-                        )
-
-                        ContactIconButton(
-                            icon = Icons.Default.Email,
-                            backgroundColor = Color(0xFFF0DFD8),
-                            onClick = { }
-                        )
+                        ProfileContactBar(profile)
                     }
 
                     val dateText = gigState.selectedDate?.let {
@@ -136,7 +117,6 @@ fun ProfileScreen(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
-            // Imagen de Cabecera con Botones
             Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
                 AsyncImage(
                     model = profile?.photoUrl,
@@ -183,7 +163,6 @@ fun ProfileScreen(
 
                     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-                    // CALENDARIO (Feature Form)
                     SectionTitleView(title = "Disponibilidad", indicatorColor = Color(0xFF8D4E2C))
                     Surface(
                         shape = RoundedCornerShape(16.dp),
@@ -200,7 +179,6 @@ fun ProfileScreen(
                         )
                     }
 
-                    // SOBRE MÍ
                     SectionTitleView(title = "Sobre mí")
                     Text(
                         text = profile?.description?.ifEmpty { "Este músico aún no ha agregado una descripción." } ?: "",
@@ -208,7 +186,6 @@ fun ProfileScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    // INSTRUMENTOS Y GÉNEROS
                     if (profile?.instruments?.isNotEmpty() == true) {
                         SectionTitleView(title = "Instrumentos", indicatorColor = MaterialTheme.colorScheme.secondary)
                         FlowRow(
@@ -221,7 +198,18 @@ fun ProfileScreen(
                         }
                     }
 
-                    // RESEÑAS (HEAD)
+                    if (profile?.genres?.isNotEmpty() == true) {
+                        SectionTitleView(title = "Generos", indicatorColor = MaterialTheme.colorScheme.secondary)
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            profile.genres.forEach { g ->
+                                GenreChip(name = g.name, isSelected = true, onClick = {})
+                            }
+                        }
+                    }
+
                     SectionTitleView(title = "Reseñas y Calificaciones", indicatorColor = MaterialTheme.colorScheme.outline)
                     ReviewsSection(
                         reviews = reviewState.reviews,
@@ -242,7 +230,6 @@ fun ProfileScreen(
         }
     }
 
-    // MODALES Y DIÁLOGOS UNIFICADOS
     if (reviewState.showAddModal) {
         AddReviewModal(
             rating = reviewState.ratingInput,
@@ -271,7 +258,6 @@ fun ProfileScreen(
         }
     }
 
-    // Pickers de fecha y hora
     if (showDatePicker) {
         GigDatePickerDialog(onDismiss = { showDatePicker = false }, onDateSelected = gigViewModel::onDateSelected)
     }

@@ -12,22 +12,20 @@ import androidx.compose.ui.graphics.Color
 fun ProfileCalendarMaterial(
     onDateSelected: (Long?) -> Unit
 ) {
-    // El estado se configura solo con la fecha actual del sistema
     val datePickerState = rememberDatePickerState()
 
-    // Notifica al padre cada vez que el usuario toca un día diferente
     LaunchedEffect(datePickerState.selectedDateMillis) {
         onDateSelected(datePickerState.selectedDateMillis)
     }
 
     DatePicker(
         state = datePickerState,
-        title = null, // Elimina el texto superior
-        headline = null, // Elimina la fecha grande seleccionada
-        showModeToggle = false, // Quita el icono de teclado
+        title = null,
+        headline = null,
+        showModeToggle = false,
         colors = DatePickerDefaults.colors(
-            containerColor = Color.Transparent, // 100% Transparente
-            selectedDayContainerColor = Color(0xFF8D4E2C), // Color café de tu tema
+            containerColor = Color.Transparent,
+            selectedDayContainerColor = Color(0xFF8D4E2C),
             selectedDayContentColor = Color.White,
             todayDateBorderColor = Color(0xFF8D4E2C),
             todayContentColor = Color(0xFF8D4E2C)

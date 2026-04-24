@@ -137,7 +137,7 @@ fun GigRequestFormScreen(
                     onClick = onClose,
                     modifier = Modifier.weight(1f).height(56.dp),
                     shape = RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF0DFD8)) // Beige oscuro
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF0DFD8))
                 ) {
                     Text(
                         "CANCELAR",
@@ -152,7 +152,7 @@ fun GigRequestFormScreen(
                     enabled = !state.isLoading,
                     modifier = Modifier.weight(1f).height(56.dp),
                     shape = RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B6B61)) // Verde oscuro de la imagen
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B6B61))
                 ) {
                     Text(
                         if (state.isLoading) "ENVIANDO..." else "ENVIAR\nSOLICITUD",

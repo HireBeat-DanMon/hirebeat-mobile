@@ -24,7 +24,6 @@ fun HireBeatBottomNavigation(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         tonalElevation = 3.dp
     ) {
-        // --- EXPLORAR / FEED ---
         val isFeedSelected = currentDestination?.hierarchy?.any { it.route?.contains("FeedRoute") == true } == true
         NavigationBarItem(
             selected = isFeedSelected,
@@ -38,7 +37,6 @@ fun HireBeatBottomNavigation(
             )
         )
 
-        // --- SUPLENCIAS / BANDEJA ---
         val isGigSelected = currentDestination?.hierarchy?.any { it.route?.contains("GigRequestsRoute") == true } == true
         NavigationBarItem(
             selected = isGigSelected,
@@ -47,9 +45,7 @@ fun HireBeatBottomNavigation(
             icon = { Icon(Icons.Default.CalendarMonth, contentDescription = null) }
         )
 
-        // --- LÓGICA DE ROL ---
         if (roleName?.contains("Musician", ignoreCase = true) == true) {
-            // Perfil
             val isProfileSelected = currentDestination?.hierarchy?.any { it.route?.contains("MyProfileRoute") == true } == true
             NavigationBarItem(
                 selected = isProfileSelected,
@@ -57,7 +53,7 @@ fun HireBeatBottomNavigation(
                 label = { Text("Mi Perfil") },
                 icon = { Icon(Icons.Default.Person, contentDescription = null) }
             )
-            // Reseñas
+
             val isReviewsSelected = currentDestination?.hierarchy?.any { it.route?.contains("MyReviewsRoute") == true } == true
             NavigationBarItem(
                 selected = isReviewsSelected,
@@ -66,7 +62,7 @@ fun HireBeatBottomNavigation(
                 icon = { Icon(Icons.Default.Star, contentDescription = "Mis Reseñas") }
             )
         } else {
-            // Botón Salir para Reclutadores
+
             NavigationBarItem(
                 selected = false,
                 onClick = onLogout,
