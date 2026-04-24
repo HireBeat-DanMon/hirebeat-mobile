@@ -7,26 +7,22 @@ fun ProfileResponseDto.toDomain(): UserProfile {
     return UserProfile(
         id = this.id ?: "",
         fullName = this.fullname ?: "Usuario",
+        photoUrl = this.imageUrl ?: "",
         email = this.email ?: "",
         city = this.city ?: "Sin ubicación",
+        experience = this.experience ?: 0,
         description = this.descripcion ?: "",
         role = if (!instruments.isNullOrEmpty()) "Musician" else "Recruiter",
-
-        // Mapeamos los instrumentos (level ya es String en el DTO y en el Dominio)
         instruments = this.instruments?.map {
             ProfileInstrument(
                 instrument = CatalogItem(it.id ?: 0, it.name ?: ""),
-                level = it.level ?: "BASICO", // Ahora coinciden los tipos
+                level = it.level ?: "BASICO",
                 isPrincipal = it.isPrincipal ?: false
             )
         } ?: emptyList(),
-
-        // Mapeamos los géneros
         genres = this.genres?.map {
             CatalogItem(it.id ?: 0, it.name ?: "")
         } ?: emptyList(),
-
-        // Mapeamos los links
         links = this.links?.map {
             ProfileLink(
                 name = it.name ?: "",

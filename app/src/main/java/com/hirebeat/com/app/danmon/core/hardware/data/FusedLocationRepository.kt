@@ -27,14 +27,12 @@ class FusedLocationRepository @Inject constructor(
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 result.lastLocation?.let { loc ->
-                    // Aplicamos validación de dominio antes de emitir
                     try {
                         val point = LocationPoint(loc.latitude, loc.longitude, loc.time)
                         if (point.isFresh()) {
                             trySend(point)
                         }
                     } catch (e: Exception) {
-                        // Loggear o manejar error de validación
                     }
                 }
             }

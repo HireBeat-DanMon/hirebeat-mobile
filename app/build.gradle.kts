@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-
     alias(libs.plugins.secrets.gradle)
     alias(libs.plugins.jetbrainsKotlinSerialization)
     alias(libs.plugins.devtools.ksp)
@@ -34,6 +33,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+        isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures {
         compose = true
@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.text)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.ui.text)
 
     testImplementation(libs.junit)
 
@@ -94,7 +95,12 @@ dependencies {
     implementation(libs.hilt.android)                               // Implementación de Hilt
     implementation(libs.hilt.navigation.compose)
     implementation(libs.play.services.location)
-    ksp(libs.hilt.compiler)                                         // KSP
+    ksp(libs.hilt.compiler)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
     implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
@@ -105,4 +111,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

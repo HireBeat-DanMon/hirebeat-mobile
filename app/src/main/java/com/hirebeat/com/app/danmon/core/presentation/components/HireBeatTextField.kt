@@ -7,7 +7,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -21,7 +20,10 @@ fun HireBeatTextField(
     label: String,
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
-    imeAction: ImeAction = ImeAction.Next, // Por defecto "Siguiente"
+    isError: Boolean = false,
+    errorMessage: String? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    imeAction: ImeAction = ImeAction.Next,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     OutlinedTextField(
@@ -29,17 +31,25 @@ fun HireBeatTextField(
         onValueChange = onValueChange,
         label = { Text(label) },
         modifier = modifier.fillMaxWidth(),
+        isError = isError,
+        supportingText = if (isError && errorMessage != null) {
+            { Text(text = errorMessage) }
+        } else null,
+        trailingIcon = trailingIcon,
         shape = RoundedCornerShape(Sizing.CardCorner),
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        visualTransformation =
+            if (isPassword) PasswordVisualTransformation()
+            else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
-            keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Text,
+            keyboardType =
+                if (isPassword) KeyboardType.Password
+                else KeyboardType.Text,
             imeAction = imeAction
         ),
-        keyboardActions = keyboardActions, // Define qué pasa al pulsar ese icono
+        keyboardActions = keyboardActions,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
-            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            errorBorderColor = MaterialTheme.colorScheme.error
         )
     )
 }

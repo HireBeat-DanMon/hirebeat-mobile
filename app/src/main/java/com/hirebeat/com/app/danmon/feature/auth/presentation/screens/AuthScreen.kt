@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hirebeat.com.app.danmon.core.presentation.components.*
 import com.hirebeat.com.app.danmon.core.theme.*
+import com.hirebeat.com.app.danmon.feature.auth.presentation.components.LoginRegisterSwitcher
 import com.hirebeat.com.app.danmon.feature.auth.presentation.components.RoleCard
 import com.hirebeat.com.app.danmon.feature.auth.presentation.viewmodels.AuthViewModel
 
@@ -74,8 +74,8 @@ fun AuthScreen(
                 if (!state.isLoginMode) {
                     Text(
                         text = "¿Qué estás buscando?",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.Medium)) {
                         RoleCard(
@@ -135,8 +135,8 @@ fun AuthScreen(
 
                 HireBeatButton(
                     text = if (state.isLoading) "Cargando..." else if (state.isLoginMode) "Entrar" else "Registrarse",
-                    onClick = { viewModel.submit() }, // <-- CAMBIO CLAVE AQUI
-                    enabled = !state.isLoading // Deshabilita el botón si está cargando
+                    onClick = { viewModel.submit() },
+                    enabled = !state.isLoading
                 )
 
             }
@@ -159,7 +159,7 @@ fun AuthHeaderSection() {
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                            MaterialTheme.colorScheme.primaryContainer,
                             MaterialTheme.colorScheme.background
                         )
                     )
@@ -173,17 +173,15 @@ fun AuthHeaderSection() {
         ) {
             Text(
                 text = "HireBeat",
-                style = MaterialTheme.typography.displayMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
+                style = MaterialTheme.typography.displayMedium,
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 text = "Siente el ritmo. Encuentra a tu próximo músico de confianza.",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = Spacing.ExtraLarge),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

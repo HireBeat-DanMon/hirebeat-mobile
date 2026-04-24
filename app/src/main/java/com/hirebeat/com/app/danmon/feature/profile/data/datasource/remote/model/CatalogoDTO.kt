@@ -8,3 +8,6 @@ data class SimpleCatalogResponseDto(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String
 )
+
+@Serializable
+data class ImageResponseDto(val url: String)

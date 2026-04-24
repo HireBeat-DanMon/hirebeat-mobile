@@ -9,10 +9,19 @@ object AuthRoute
 object SaveProfileRoute
 
 @Serializable
-object HomeRoute // Para el Feed principal
+object HomeRoute
 
 @Serializable
 object MyProfileRoute
 
 @Serializable
+object FeedRoute
+
+@Serializable
 data class ProfileDetailRoute(val userId: String)
+
+@Serializable
+object GigRequestsRoute
+
+@Serializable
+object MyReviewsRoute
