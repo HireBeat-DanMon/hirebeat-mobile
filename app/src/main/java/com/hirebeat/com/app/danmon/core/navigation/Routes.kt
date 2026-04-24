@@ -19,3 +19,6 @@ object FeedRoute
 
 @Serializable
 data class ProfileDetailRoute(val userId: String)
+
+@Serializable
+object GigRequestsRoute
