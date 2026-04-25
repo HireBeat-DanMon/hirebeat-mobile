@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hirebeat.com.app.danmon.feature.profile.domain.entities.UserProfile
 import com.hirebeat.com.app.danmon.feature.profile.domain.usecases.GetAllProfilesUseCases
+import com.hirebeat.com.app.danmon.feature.profile.presentation.screens.FeedUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,9 +36,3 @@ class FeedViewModel @Inject constructor(
         }
     }
 }
-
-data class FeedUiState(
-    val profiles: List<UserProfile> = emptyList(),
-    val isLoading: Boolean = false,
-    val error: String? = null
-)

@@ -1,5 +1,8 @@
 package com.hirebeat.com.app.danmon.feature.profile.data.repositories
 
+import com.hirebeat.com.app.danmon.feature.profile.data.datasource.local.ProfileDao
+import com.hirebeat.com.app.danmon.feature.profile.data.datasource.local.entity.toDomain
+import com.hirebeat.com.app.danmon.feature.profile.data.datasource.local.entity.toEntity
 import com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.api.ProfileApi
 import com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.mapper.*
 import com.hirebeat.com.app.danmon.feature.profile.data.datasource.remote.model.ProfileSetupRequestDto
@@ -11,11 +14,20 @@ import okhttp3.RequestBody
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
-    private val api: ProfileApi
+    private val api: ProfileApi,
+    private val dao : ProfileDao
 ) : ProfileRepository {
 
     override suspend fun getMyProfile(): UserProfile {
-        return api.getMyProfile().toDomain()
+        return try {
+            val remoteProfile = api.getMyProfile().toDomain()
+            dao.insertMyProfile(remoteProfile.toEntity())
+
+            remoteProfile
+        } catch (e: Exception) {
+            val localProfile = dao.getMyProfile()
+            localProfile?.toDomain() ?: throw Exception("Sin conexión a internet y sin perfil guardado", e)
+        }
     }
 
     override suspend fun getAllProfiles(): List<UserProfile> {

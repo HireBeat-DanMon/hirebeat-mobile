@@ -3,6 +3,7 @@ package com.hirebeat.com.app.danmon.core.di
 import android.content.Context
 import androidx.room.Room
 import com.hirebeat.com.app.danmon.core.database.AppDatabase
+import com.hirebeat.com.app.danmon.feature.profile.data.datasource.local.ProfileDao
 import com.hirebeat.com.app.danmon.feature.review.data.datasource.local.dao.ReviewDao
 import dagger.Module
 import dagger.Provides
@@ -22,12 +23,19 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "hirebeat_db"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
     @Singleton
     fun provideReviewDao(database: AppDatabase): ReviewDao {
         return database.reviewDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileDao(database: AppDatabase): ProfileDao {
+        return database.profileDao()
     }
 }
