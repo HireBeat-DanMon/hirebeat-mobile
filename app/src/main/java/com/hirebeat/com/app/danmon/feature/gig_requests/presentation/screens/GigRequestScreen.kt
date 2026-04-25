@@ -8,8 +8,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hirebeat.com.app.danmon.core.theme.Spacing
@@ -26,16 +26,15 @@ fun GigRequestsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF4EDE8))
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = Spacing.Medium)
     ) {
         Spacer(modifier = Modifier.height(Spacing.Large))
 
         Text(
             text = "Bandeja de\nSolicitudes",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.ExtraBold,
-            color = Color(0xFF8D4E2C),
+            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold),
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(bottom = Spacing.Large)
         )
 
@@ -50,53 +49,87 @@ fun GigRequestsScreen(
 
         Box(modifier = Modifier.fillMaxSize()) {
 
-            if (state.isLoading && state.requests.isEmpty()) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center),
-                    color = Color(0xFF3B6B61)
-                )
-            }
+            when {
+                state.isLoading && state.requests.isEmpty() -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
 
-            state.error?.let { errorMessage ->
-                Text(
-                    text = errorMessage,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            if (!state.isLoading && state.requests.isEmpty()) {
-                Text(
-                    text = if (state.isReceivedTab)
-                        "No tienes solicitudes recibidas aún."
-                    else
-                        "No has enviado ninguna solicitud.",
-                    color = Color.Gray,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            } else {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(Spacing.Medium),
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp)
-                ) {
-                    items(
-                        items = state.requests,
-                        key = { it.id }
-                    ) { request ->
-                        GigRequestCard(
-                            request = request,
-                            isMusician = state.isReceivedTab,
-                            onAccept = {
-                                viewModel.updateStatus(request.id, "ACCEPTED")
-                            },
-                            onReject = {
-                                viewModel.updateStatus(request.id, "REJECTED")
-                            }
+                state.error != null && state.requests.isEmpty() -> {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(horizontal = Spacing.Large),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = state.error ?: "Error desconocido",
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodyMedium,
+                            textAlign = TextAlign.Center
                         )
+                        Spacer(modifier = Modifier.height(Spacing.Medium))
+                        Button(
+                            onClick = { viewModel.fetchRequests(state.isReceivedTab) },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            )
+                        ) {
+                            Text(
+                                text = "Reintentar",
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     }
                 }
+
+                !state.isLoading && state.error == null && state.requests.isEmpty() -> {
+                    Text(
+                        text = if (state.isReceivedTab)
+                            "No tienes solicitudes recibidas aún."
+                        else
+                            "No has enviado ninguna solicitud.",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.align(Alignment.Center),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                state.requests.isNotEmpty() -> {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(Spacing.Medium),
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(top = 8.dp, bottom = 100.dp)
+                    ) {
+                        items(
+                            items = state.requests,
+                            key = { it.id }
+                        ) { request ->
+                            GigRequestCard(
+                                request = request,
+                                isMusician = state.isReceivedTab,
+                                onAccept = {
+                                    viewModel.updateStatus(request.id, "ACCEPTED")
+                                },
+                                onReject = {
+                                    viewModel.updateStatus(request.id, "REJECTED")
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (state.isLoading && state.requests.isNotEmpty()) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.TopCenter),
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }

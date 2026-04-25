@@ -3,7 +3,6 @@ package com.hirebeat.com.app.danmon.feature.gig_requests.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Close
@@ -15,10 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hirebeat.com.app.danmon.core.theme.Sizing
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 import com.hirebeat.com.app.danmon.feature.gig_requests.domain.entities.GigRequestItem
 
@@ -31,8 +30,10 @@ fun GigRequestCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(Spacing.Medium)) {
@@ -43,59 +44,59 @@ fun GigRequestCard(
                 verticalAlignment = Alignment.Top
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Placeholder para el Avatar
                     Box(
                         modifier = Modifier
                             .size(48.dp)
                             .clip(CircleShape)
-                            .background(Color.LightGray)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
                     )
                     Spacer(modifier = Modifier.width(Spacing.Small))
                     Column {
                         Text(
                             text = "Nombre del Usuario",
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF221A16)
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
-                            text = if(isMusician) "Reclutador" else "Músico",
+                            text = if (isMusician) "Reclutador" else "Músico",
                             style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
 
-                val (statusColor, statusBg, statusText) = when(request.status) {
-                    "ACCEPTED" -> Triple(Color(0xFF3B6B61), Color(0xFFE8F0EE), "ACEPTADA")
-                    "REJECTED" -> Triple(Color(0xFFB00020), Color(0xFFFDECEA), "RECHAZADA")
-                    else -> Triple(Color(0xFFC97E58), Color(0xFFFCEAE3), "PENDIENTE")
+                val (statusColor, statusBg, statusText) = when (request.status) {
+                    "ACCEPTED" -> Triple(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.primaryContainer, "ACEPTADA")
+                    "REJECTED" -> Triple(MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.errorContainer, "RECHAZADA")
+                    else -> Triple(MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.secondaryContainer, "PENDIENTE")
                 }
 
                 Text(
                     text = statusText,
                     color = statusColor,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 10.sp,
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 10.sp
+                    ),
                     modifier = Modifier
-                        .background(statusBg, RoundedCornerShape(12.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .background(statusBg, CircleShape)
+                        .padding(horizontal = Spacing.Small, vertical = 4.dp)
                 )
             }
 
             Spacer(modifier = Modifier.height(Spacing.Medium))
 
             Surface(
-                color = Color(0xFFF4EDE8),
-                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.padding(Spacing.Medium),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(Spacing.Small)
                 ) {
-                    EventDetailRow(icon = Icons.Default.CalendarToday, label = "FECHA DE EVENTO", value = request.startTime) // Formatear fecha después
-                    EventDetailRow(icon = Icons.Default.Schedule, label = "HORARIO", value = "${request.startTime} - ${request.endTime}") // Formatear hora después
+                    EventDetailRow(icon = Icons.Default.CalendarToday, label = "FECHA DE EVENTO", value = request.startTime)
+                    EventDetailRow(icon = Icons.Default.Schedule, label = "HORARIO", value = "${request.startTime} - ${request.endTime}")
                     EventDetailRow(icon = Icons.Default.LocationOn, label = "UBICACIÓN", value = request.location)
                 }
             }
@@ -108,24 +109,28 @@ fun GigRequestCard(
                 ) {
                     OutlinedButton(
                         onClick = onReject,
-                        modifier = Modifier.weight(1f).height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFB00020)),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFB00020))
+                        modifier = Modifier.weight(1f).height(Sizing.ButtonHeight),
+                        shape = MaterialTheme.shapes.large,
+                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
                     ) {
                         Icon(Icons.Default.Close, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("RECHAZAR", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        // Aplicamos labelLarge para aprovechar tus fuentes globales
+                        Text("RECHAZAR", style = MaterialTheme.typography.labelLarge)
                     }
                     Button(
                         onClick = onAccept,
-                        modifier = Modifier.weight(1f).height(48.dp),
-                        shape = RoundedCornerShape(24.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B6B61))
+                        modifier = Modifier.weight(1f).height(Sizing.ButtonHeight),
+                        shape = MaterialTheme.shapes.large,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
                     ) {
                         Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("ACEPTAR", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        Text("ACEPTAR", style = MaterialTheme.typography.labelLarge)
                     }
                 }
             }
@@ -136,11 +141,24 @@ fun GigRequestCard(
 @Composable
 fun EventDetailRow(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, value: String) {
     Row(verticalAlignment = Alignment.Top) {
-        Icon(icon, contentDescription = null, tint = Color(0xFFC97E58), modifier = Modifier.size(16.dp).padding(top = 2.dp))
-        Spacer(modifier = Modifier.width(8.dp))
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(16.dp).padding(top = 2.dp)
+        )
+        Spacer(modifier = Modifier.width(Spacing.Small))
         Column {
-            Text(text = label, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color.Gray)
-            Text(text = value, style = MaterialTheme.typography.bodySmall, color = Color.Black)
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold, fontSize = 10.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

@@ -1,19 +1,17 @@
 package com.hirebeat.com.app.danmon.feature.gig_requests.presentation.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.hirebeat.com.app.danmon.core.theme.Sizing
 import com.hirebeat.com.app.danmon.core.theme.Spacing
 import com.hirebeat.com.app.danmon.feature.gig_requests.presentation.components.*
 
@@ -31,13 +29,8 @@ fun GigRequestFormScreen(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(
-            topStart = 32.dp,
-            topEnd = 32.dp,
-            bottomStart = 32.dp,
-            bottomEnd = 32.dp
-        ),
-        color = Color(0xFFF4EDE8)
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Column(
             modifier = Modifier.padding(Spacing.Large),
@@ -50,15 +43,18 @@ fun GigRequestFormScreen(
             ) {
                 Text(
                     text = "Solicitar Suplencia",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF8D4E2C)
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.primary
                 )
+
                 IconButton(
                     onClick = onClose,
-                    modifier = Modifier.background(Color.White, RoundedCornerShape(12.dp))
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 ) {
-                    Icon(Icons.Default.Close, contentDescription = "Cerrar", tint = Color.Gray)
+                    Icon(Icons.Default.Close, contentDescription = "Cerrar")
                 }
             }
 
@@ -135,32 +131,38 @@ fun GigRequestFormScreen(
             ) {
                 Button(
                     onClick = onClose,
-                    modifier = Modifier.weight(1f).height(56.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF0DFD8))
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(Sizing.ButtonHeight),
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                 ) {
                     Text(
-                        "CANCELAR",
-                        color = Color(0xFF8D4E2C),
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
+                        text = "CANCELAR",
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
 
                 Button(
                     onClick = onSubmit,
                     enabled = !state.isLoading,
-                    modifier = Modifier.weight(1f).height(56.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3B6B61))
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(Sizing.ButtonHeight),
+                    shape = MaterialTheme.shapes.large,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 ) {
                     Text(
-                        if (state.isLoading) "ENVIANDO..." else "ENVIAR\nSOLICITUD",
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp
+                        text = if (state.isLoading) "ENVIANDO..." else "ENVIAR\nSOLICITUD",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }

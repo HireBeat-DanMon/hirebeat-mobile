@@ -24,10 +24,20 @@ fun GigDatePickerDialog(
                     onDateSelected(date)
                 }
                 onDismiss()
-            }) { Text("Aceptar") }
+            }) {
+                Text(
+                    text = "Aceptar",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancelar") }
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = "Cancelar",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
         }
     ) {
         DatePicker(state = datePickerState)
@@ -45,16 +55,32 @@ fun GigTimePickerDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(title) },
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+        },
         text = { TimePicker(state = timePickerState) },
         confirmButton = {
             TextButton(onClick = {
                 onTimeSelected(LocalTime.of(timePickerState.hour, timePickerState.minute))
                 onDismiss()
-            }) { Text("Aceptar") }
+            }) {
+                Text(
+                    text = "Aceptar",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancelar") }
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = "Cancelar",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
         }
     )
 }
